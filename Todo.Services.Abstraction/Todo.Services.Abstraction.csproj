@@ -11,4 +11,9 @@
     <Folder Include="ServerServices\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
+    <ProjectReference Include="..\Todo.ModelViews\Todo.ModelViews.csproj" />
+  </ItemGroup>
+
 </Project>

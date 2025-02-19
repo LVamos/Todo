@@ -17,6 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Todo.App\Todo.App.csproj" />
+    <ProjectReference Include="..\Todo.ModelViews\Todo.ModelViews.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 

@@ -10,4 +10,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
+    <ProjectReference Include="..\Todo.Services.Abstraction\Todo.Services.Abstraction.csproj" />
+  </ItemGroup>
+
 </Project>
