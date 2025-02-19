@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Todo.App\Todo.App.csproj" />
-    <ProjectReference Include="..\Todo.ModelViews\Todo.ModelViews.csproj" />
+    <ProjectReference Include="..\Todo.ModelViews\Todo.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Services.Abstraction",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Entities", "Todo.Entities\Todo.Entities.csproj", "{BB48A54B-D1B8-415E-9321-7CBDA0544695}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.ModelViews", "Todo.ModelViews\Todo.ModelViews.csproj", "{28A72706-3F21-4A37-8F9F-CB2C7E71C5F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.ViewModels", "Todo.ModelViews\Todo.ViewModels.csproj", "{28A72706-3F21-4A37-8F9F-CB2C7E71C5F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Constants", "Todo.Constants\Todo.Constants.csproj", "{A22D1241-3178-48AE-A1D0-0FCB7C20A5F0}"
 EndProject
