@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>warnings</Nullable>
+	  <NoWarn>CS8618;NU1803</NoWarn>
+
   </PropertyGroup>
 
   <ItemGroup>
