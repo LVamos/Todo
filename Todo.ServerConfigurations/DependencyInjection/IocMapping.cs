@@ -1,4 +1,10 @@
-﻿namespace Todo.ServerConfigurations.DependencyInjection;
+﻿using Autofac;
+
+using Microsoft.Extensions.Configuration;
+
+using Todo.Constants.Settings;
+
+namespace Todo.ServerConfigurations.DependencyInjection;
 
 /// <summary>
 ///     Maps services for dependency injection.
@@ -7,13 +13,6 @@ public class IocMapping
 {
 	protected void RegisterCommunicationServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<DigitooAuthorizationSetter>().As<IDigitooAuthorizationSetter>();
-		builder.RegisterType<VarioadapterAuthorizationSetter>().As<IVarioadapterAuthorizationSetter>();
-		builder.RegisterType<DigitooAuthorizationSetterV2>().As<IDigitooAuthorizationSetterV2>();
-		builder.RegisterType<K2AdapterAuthorizationSetter>().As<IK2AdapterAuthorizationSetter>();
-		builder.RegisterType<DigitooHeaderSetter>().As<IDigitooHeaderSetter>();
-		builder.RegisterType<CommunicationClient>().As<ICommunicationClient>();
-		builder.RegisterType<CommunicationClientProvider>().As<ICommunicationClientProvider>();
 	}
 
 	/// <summary>
@@ -22,9 +21,6 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	protected virtual void RegisterServerServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<VarioAdapterServerService>().As<IVarioAdapterServerService>();
-		builder.RegisterType<K2AdapterServerService>().As<IK2AdapterServerService>();
-		builder.RegisterType<DigitooServerService>().As<IDigitooServerService>();
 	}
 
 	/// <summary>
@@ -43,9 +39,6 @@ public class IocMapping
 
 	protected virtual void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
-		builder.RegisterInstance(new DbContextOptions<DigitooAdapterDbContext>());
-		builder.RegisterType<ContextFactory>().As<IContextFactory>();
-		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
 	}
 
 	/// <summary>
@@ -54,8 +47,8 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	protected void RegisterConfigurationServices(IConfiguration configuration, ContainerBuilder builder)
 	{
-		builder.Register(x => configuration.GetSection(DigitooSettings.SectionName).Get<DigitooSettings>()!)
-			.As<DigitooSettings>();
+		builder.Register(x => configuration.GetSection(TodoSettings.SectionName).Get<TodoSettings>())
+			.As<TodoSettings>();
 	}
 
 	/// <summary>
@@ -64,8 +57,6 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	private void RegisterBackgroundServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<K2ExporterService>().As<IStartable>().SingleInstance();
-		builder.RegisterType<WorkspaceUpdaterService>().As<IStartable>().SingleInstance();
 	}
 
 	/// <summary>
@@ -74,11 +65,5 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	protected void RegisterBusinessServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<RegisterService>().As<IRegisterService>();
-		builder.RegisterType<AutomaticK2ExportSettingsService>().As<IAutomaticK2ExportSettingsService>();
-		builder.RegisterType<RegisteredWorkspaceService>().As<IRegisteredWorkspaceService>();
-		builder.RegisterType<LoggerService>().As<ILoggerService>();
-		builder.RegisterType<TestService>().As<ITestService>();
-		builder.RegisterType<DigitooService>().As<IDigitooService>();
 	}
 }

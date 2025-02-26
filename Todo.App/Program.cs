@@ -2,8 +2,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
 using Todo.App;
+using Todo.App.Helpers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = ConfigurationHelper.GetConfiguration(builder.Environment);
 
 // using autoFAC instead of standard di
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
