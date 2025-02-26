@@ -25,13 +25,6 @@ public class Startup
 		});
 	}
 
-	public void ConfigureContainer(ContainerBuilder builder)
-	{
-		// Registering services in Autofac instead of standard DI
-		//builder.RegisterType<MyService>().As<IMyService>().InstancePerLifetimeScope();
-		//builder.RegisterType<AnotherService>().As<IAnotherService>().SingleInstance();
-	}
-
 	public void Configure(WebApplication app, IWebHostEnvironment env)
 	{
 		if (env.IsDevelopment())
