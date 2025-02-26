@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Todo.Api\Todo.Api.csproj" />
     <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
+    <ProjectReference Include="..\Todo.ServerConfigurations\Todo.ServerConfigurations.csproj" />
   </ItemGroup>
 
 </Project>

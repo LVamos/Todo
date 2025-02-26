@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
+    <ProjectReference Include="..\Todo.Services.Abstraction\Todo.Services.Abstraction.csproj" />
+    <ProjectReference Include="..\Todo.Services\Todo.Services.csproj" />
+  </ItemGroup>
+
+</Project>
