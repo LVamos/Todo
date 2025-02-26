@@ -1,23 +1,20 @@
-var builder = WebApplication.CreateBuilder(args);
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
-// Add services to the container.
+using Todo.App;
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+// using autoFAC instead of standard di
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+Startup startup = new(builder.Configuration);
+startup.ConfigureServices(builder.Services);
 
-app.UseHttpsRedirection();
+// Register services into Autofac instead of standard DI container
+builder.Host.ConfigureContainer<ContainerBuilder>(startup.ConfigureContainer);
 
-app.UseAuthorization();
-
-app.MapControllers();
+WebApplication app = builder.Build();
+startup.Configure(app, app.Environment);
 
 app.Run();
