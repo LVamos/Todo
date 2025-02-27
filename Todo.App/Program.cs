@@ -1,10 +1,13 @@
 using Autofac.Extensions.DependencyInjection;
 
+using Serilog;
+
 using Todo.App;
 using Todo.App.Helpers;
 using Todo.ServerConfigurations.DependencyInjection;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 IConfiguration configuration = ConfigurationHelper.GetConfiguration(builder.Environment);
 
 // using autoFAC instead of standard di
