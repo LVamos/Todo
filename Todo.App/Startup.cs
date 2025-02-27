@@ -2,6 +2,8 @@
 
 using System.Text.Json.Serialization;
 
+using Todo.Api;
+
 namespace Todo.App;
 
 public class Startup
@@ -18,9 +20,11 @@ public class Startup
 		services.AddControllers();
 		services.AddSwaggerGen();
 
-		// Adding JSON serialization with support for cyclic references
-		services.AddControllers().AddJsonOptions(options =>
+		services.AddControllers()
+			.AddApplicationPart(typeof(AssemblyMarker).Assembly) // Set location of controllers
+			.AddJsonOptions(options =>
 		{
+			// Adding JSON serialization with support for cyclic references
 			options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 		});
 	}
