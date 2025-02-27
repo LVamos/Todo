@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <Nullable>warnings</Nullable>
-	  <NoWarn>CS8632;CS8618;NU1803</NoWarn>
+	  <NoWarn>CS8714;CS8621;CS8632;CS8618;NU1803</NoWarn>
 	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
