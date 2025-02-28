@@ -3,6 +3,8 @@
 using Microsoft.Extensions.Configuration;
 
 using Todo.Constants.Settings;
+using Todo.Services.Abstraction.Services;
+using Todo.Services.Services;
 
 namespace Todo.ServerConfigurations.DependencyInjection;
 
@@ -65,5 +67,6 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	protected void RegisterBusinessServices(ContainerBuilder builder)
 	{
+		builder.RegisterType<LoggerService>().As<ILoggerService>();
 	}
 }
