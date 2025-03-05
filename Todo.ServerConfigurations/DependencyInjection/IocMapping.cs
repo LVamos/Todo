@@ -1,11 +1,14 @@
 ﻿using Autofac;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 using Todo.Constants.Settings;
 using Todo.Dal.Abstraction;
 using Todo.Dal.Context;
+using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
+using Todo.Services.DatabaseServices;
 using Todo.Services.Services;
 
 namespace Todo.ServerConfigurations.DependencyInjection;
@@ -43,6 +46,8 @@ public class IocMapping
 
 	protected virtual void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
+		builder.RegisterInstance(new DbContextOptions<TodoDbContext>());
+		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
 		builder.RegisterType<ContextFactory>().As<IContextFactory>();
 	}
 

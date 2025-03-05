@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DatabaseServices\" />
     <Folder Include="ServerServices\" />
   </ItemGroup>
 
