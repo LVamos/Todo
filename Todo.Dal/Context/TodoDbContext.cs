@@ -6,6 +6,9 @@ namespace Todo.Dal.Context;
 
 public class TodoDbContext : DbContext
 {
+	public DbSet<TodoList> TodoLists { get; set; }
+	public DbSet<TodoItem> TodoItems { get; set; }
+
 	public TodoDbContext(DbContextOptions<TodoDbContext> options, string connectionString) : base(options)
 	{
 		_connectionString = connectionString;
