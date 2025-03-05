@@ -3,6 +3,8 @@
 using Microsoft.Extensions.Configuration;
 
 using Todo.Constants.Settings;
+using Todo.Dal.Abstraction;
+using Todo.Dal.Context;
 using Todo.Services.Abstraction.Services;
 using Todo.Services.Services;
 
@@ -41,6 +43,7 @@ public class IocMapping
 
 	protected virtual void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
+		builder.RegisterType<ContextFactory>().As<IContextFactory>();
 	}
 
 	/// <summary>
