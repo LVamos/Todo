@@ -31,6 +31,7 @@ public class TodoDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlServer(_connectionString);
+		if (!string.IsNullOrEmpty(_connectionString))
+			optionsBuilder.UseSqlServer(_connectionString);
 	}
 }

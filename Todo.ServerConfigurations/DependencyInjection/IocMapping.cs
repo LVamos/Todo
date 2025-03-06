@@ -46,7 +46,14 @@ public class IocMapping
 
 	protected virtual void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
-		builder.RegisterInstance(new DbContextOptions<TodoDbContext>());
+		string connectionString = configuration.GetConnectionString("DefaultConnection");
+		builder.Register(ctx =>
+		{
+			DbContextOptionsBuilder<TodoDbContext> optionsBuilder = new();
+			optionsBuilder.UseSqlServer(connectionString);
+			return optionsBuilder.Options;
+		}).As<DbContextOptions<TodoDbContext>>().SingleInstance();
+
 		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
 		builder.RegisterType<ContextFactory>().As<IContextFactory>();
 	}
