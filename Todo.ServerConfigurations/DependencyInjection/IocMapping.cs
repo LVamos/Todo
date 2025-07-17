@@ -84,5 +84,6 @@ public class IocMapping
 	{
 		builder.RegisterType<LoggerService>().As<ILoggerService>();
 		builder.RegisterType<ITodoListService>().As<ITodoListService>();
+		builder.RegisterType<ITodoItemService>().As<ITodoItemService>();
 	}
 }
