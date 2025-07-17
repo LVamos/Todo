@@ -83,5 +83,6 @@ public class IocMapping
 	protected void RegisterBusinessServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<LoggerService>().As<ILoggerService>();
+		builder.RegisterType<ITodoListService>().As<ITodoListService>();
 	}
 }
