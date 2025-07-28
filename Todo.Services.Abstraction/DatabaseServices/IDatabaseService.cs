@@ -1,19 +1,18 @@
-﻿using Todo.Entities.Entities;
+﻿using Todo.ViewModels.ViewModels;
 
-namespace Todo.Services.Abstraction.DatabaseServices;
-
-public interface IDatabaseService
+namespace Todo.Services.Abstraction.DatabaseServices
 {
-	Task<IEnumerable<TodoList>> GetAllTodoListsAsync();
-	Task<TodoList?> GetTodoListByIdAsync(int id);
-	Task AddTodoListAsync(TodoList todoList);
-	Task UpdateTodoListAsync(TodoList todoList);
-	Task DeleteTodoListAsync(int id);
-
-	// Operace s TodoItem
-	Task<IEnumerable<TodoItem>> GetTodoItemsByListIdAsync(int todoListId);
-	Task<TodoItem?> GetTodoItemByIdAsync(int id);
-	Task AddTodoItemAsync(TodoItem todoItem);
-	Task UpdateTodoItemAsync(TodoItem todoItem);
-	Task DeleteTodoItemAsync(int id);
+	public interface IDatabaseService
+	{
+		Task<IEnumerable<TodoListViewModel>> GetAllTodoListsAsync();
+		Task<TodoListViewModel?> GetTodoListByIdAsync(int id);
+		Task AddTodoListAsync(TodoListViewModel todoList);
+		Task UpdateTodoListAsync(TodoListViewModel todoList);
+		Task DeleteTodoListAsync(int id);
+		Task<IEnumerable<TodoItemViewModel>> GetTodoItemsByListIdAsync(int todoListId);
+		Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id);
+		Task AddTodoItemAsync(TodoItemViewModel todoItem);
+		Task UpdateTodoItemAsync(TodoItemViewModel todoItem);
+		Task DeleteTodoItemAsync(int id);
+	}
 }

@@ -1,26 +1,26 @@
-﻿using Todo.Entities.Entities;
-using Todo.Services.Abstraction.DatabaseServices;
+﻿using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
+using Todo.ViewModels.ViewModels;
 
 namespace Todo.Services.Services;
 public class TodoListService : ITodoListService
 {
-	public async Task<IEnumerable<TodoList>> GetAllTodoListsAsync()
+	public async Task<IEnumerable<TodoListViewModel>> GetAllTodoListsAsync()
 	{
 		return await _databaseService.GetAllTodoListsAsync();
 	}
 
-	public async Task<TodoList?> GetTodoListByIdAsync(int id)
+	public async Task<TodoListViewModel?> GetTodoListByIdAsync(int id)
 	{
 		return await _databaseService.GetTodoListByIdAsync(id);
 	}
 
-	public async Task AddTodoListAsync(TodoList list)
+	public async Task AddTodoListAsync(TodoListViewModel list)
 	{
 		await _databaseService.AddTodoListAsync(list);
 	}
 
-	public async Task UpdateTodoListAsync(TodoList list)
+	public async Task UpdateTodoListAsync(TodoListViewModel list)
 	{
 		await _databaseService.UpdateTodoListAsync(list);
 	}

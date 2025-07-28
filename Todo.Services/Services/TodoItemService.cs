@@ -1,26 +1,26 @@
-﻿using Todo.Entities.Entities;
-using Todo.Services.Abstraction.DatabaseServices;
+﻿using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
+using Todo.ViewModels.ViewModels;
 
 namespace Todo.Services.Services;
 public class TodoItemService : ITodoItemService
 {
-	public async Task<IEnumerable<TodoItem>> GetTodoItemsByListIdAsync(int listId)
+	public async Task<IEnumerable<TodoItemViewModel>> GetTodoItemsByListIdAsync(int listId)
 	{
 		return await _databaseService.GetTodoItemsByListIdAsync(listId);
 	}
 
-	public async Task<TodoItem?> GetTodoItemByIdAsync(int id)
+	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
 	{
 		return await _databaseService.GetTodoItemByIdAsync(id);
 	}
 
-	public async Task AddTodoItemAsync(TodoItem item)
+	public async Task AddTodoItemAsync(TodoItemViewModel item)
 	{
 		await _databaseService.AddTodoItemAsync(item);
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItem item)
+	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
 	{
 		await _databaseService.UpdateTodoItemAsync(item);
 	}
