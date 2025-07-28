@@ -54,8 +54,8 @@ public class IocMapping
 			return optionsBuilder.Options;
 		}).As<DbContextOptions<TodoDbContext>>().SingleInstance();
 
-		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
 		builder.RegisterType<ContextFactory>().As<IContextFactory>();
+		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
 	}
 
 	/// <summary>
@@ -83,7 +83,7 @@ public class IocMapping
 	protected void RegisterBusinessServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<LoggerService>().As<ILoggerService>();
-		builder.RegisterType<ITodoListService>().As<ITodoListService>();
-		builder.RegisterType<ITodoItemService>().As<ITodoItemService>();
+		builder.RegisterType<TodoListService>().As<ITodoListService>();
+		builder.RegisterType<TodoItemService>().As<ITodoItemService>();
 	}
 }
