@@ -33,10 +33,13 @@ public class DatabaseService : IDatabaseService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoListAsync(TodoListViewModel todoList)
+	public async Task UpdateTodoListAsync(TodoListViewModel list)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		context.TodoLists.Update(todoList.ToEntity());
+		TodoList existing = await context.TodoLists.FindAsync(list.Id);
+		if (existing == null)
+			throw new ArgumentException();
+		existing.Name = list.Name;
 		await context.SaveChangesAsync();
 	}
 
@@ -72,10 +75,18 @@ public class DatabaseService : IDatabaseService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItemViewModel todoItem)
+	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		context.TodoItems.Update(todoItem.ToEntity());
+		TodoItem existing = await context.TodoItems.FindAsync(item.Id);
+		if (existing == null)
+			throw new ArgumentException();
+
+		existing.Title = item.Title;
+		existing.Priority = item.Priority;
+		existing.Deadline = item.Deadline;
+		existing.Comment = item.Comment;
+		existing.IsCompleted = item.IsCompleted;
 		await context.SaveChangesAsync();
 	}
 

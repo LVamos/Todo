@@ -71,7 +71,9 @@ namespace Todo.ViewModels.Mapping
 			return new TodoListViewModel
 			{
 				Id = entity.Id,
-				Name = entity.Name
+				Name = entity.Name,
+				Items = entity.Items.ToViewModels()
+				.ToList()
 			};
 		}
 
@@ -85,7 +87,8 @@ namespace Todo.ViewModels.Mapping
 			return new TodoList
 			{
 				Id = viewModel.Id,
-				Name = viewModel.Name
+				Name = viewModel.Name,
+				Items = viewModel.Items.ToEntities().ToList()
 			};
 		}
 

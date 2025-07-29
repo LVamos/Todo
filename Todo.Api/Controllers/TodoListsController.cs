@@ -16,7 +16,7 @@ namespace Todo.API.Controllers
 			_todoListService = todoListService;
 		}
 
-		[HttpGet]
+		[HttpGet("GetAllTodoLists")]
 		[ProducesResponseType(typeof(IEnumerable<TodoListViewModel>), 200)]
 		public async Task<ActionResult<IEnumerable<TodoListViewModel>>> GetAllTodoLists()
 		{
@@ -24,7 +24,7 @@ namespace Todo.API.Controllers
 			return Ok(lists);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("GetTodoListById/{id}")]
 		[ProducesResponseType(typeof(TodoListViewModel), 200)]
 		[ProducesResponseType(404)]
 		public async Task<ActionResult<TodoListViewModel>> GetTodoListById(int id)
@@ -35,7 +35,7 @@ namespace Todo.API.Controllers
 			return Ok(list);
 		}
 
-		[HttpPost]
+		[HttpPost("AddTodoList")]
 		[ProducesResponseType(201)]
 		public async Task<ActionResult> AddTodoList([FromBody] TodoListViewModel todoList)
 		{
@@ -43,7 +43,7 @@ namespace Todo.API.Controllers
 			return CreatedAtAction(nameof(GetTodoListById), new { id = todoList.Id }, todoList);
 		}
 
-		[HttpPut("{id}")]
+		[HttpPut("UpdateTodoList/{id}")]
 		[ProducesResponseType(204)]
 		public async Task<ActionResult> UpdateTodoList(int id, [FromBody] TodoListViewModel todoList)
 		{
@@ -53,12 +53,12 @@ namespace Todo.API.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete("{id}")]
+		[HttpGet("DeleteTodoList/{id}")]
 		[ProducesResponseType(204)]
 		public async Task<ActionResult> DeleteTodoList(int id)
 		{
 			await _todoListService.DeleteTodoListAsync(id);
-			return NoContent();
+			return Ok();
 		}
 	}
 }

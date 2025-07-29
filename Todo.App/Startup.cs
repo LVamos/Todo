@@ -17,8 +17,10 @@ public class Startup
 
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddControllers();
-		services.AddSwaggerGen();
+		services.AddSwaggerGen(options =>
+		{
+			options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+		});
 
 		services.AddControllers()
 			.AddApplicationPart(typeof(AssemblyMarker).Assembly) // Set location of controllers
@@ -51,8 +53,11 @@ public class Startup
 		}
 
 		app.UseHttpsRedirection();
+
+		// Správné pořadí middleware
+		app.UseRouting();
 		app.UseAuthorization();
 		app.MapControllers();
-		app.UseRouting();
 	}
+
 }
