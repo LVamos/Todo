@@ -7,27 +7,67 @@ public class TodoItemService : ITodoItemService
 {
 	public async Task<IEnumerable<TodoItemViewModel>> GetTodoItemsByListIdAsync(int listId)
 	{
-		return await _databaseService.GetTodoItemsByListIdAsync(listId);
+		try
+		{
+			return await _databaseService.GetTodoItemsByListIdAsync(listId);
+		}
+		catch (Exception e)
+		{
+			_loggerService.LogError($"Could not find TodoItems for TodoList {listId}", e);
+			throw;
+		}
 	}
 
 	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
 	{
-		return await _databaseService.GetTodoItemByIdAsync(id);
+		try
+		{
+			return await _databaseService.GetTodoItemByIdAsync(id);
+		}
+		catch (Exception e)
+		{
+			_loggerService.LogError($"Could not find a TodoItem {id}", e);
+			throw;
+		}
 	}
 
 	public async Task AddTodoItemAsync(TodoItemViewModel item)
 	{
-		await _databaseService.AddTodoItemAsync(item);
+		try
+		{
+			await _databaseService.AddTodoItemAsync(item);
+		}
+		catch (Exception e)
+		{
+			_loggerService.LogError($"Unable to add TodoItem {item.Title}", e);
+			throw;
+		}
 	}
 
 	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
 	{
-		await _databaseService.UpdateTodoItemAsync(item);
+		try
+		{
+			await _databaseService.UpdateTodoItemAsync(item);
+		}
+		catch (Exception e)
+		{
+			_loggerService.LogError($"Unable to update TodoItem {item.Id}", e);
+			throw;
+		}
 	}
 
 	public async Task DeleteTodoItemAsync(int id)
 	{
-		await _databaseService.DeleteTodoItemAsync(id);
+		try
+		{
+			await _databaseService.DeleteTodoItemAsync(id);
+		}
+		catch (Exception e)
+		{
+			_loggerService.LogError($"Could not delete a TodoItem {id}", e);
+			throw;
+		}
 	}
 
 
