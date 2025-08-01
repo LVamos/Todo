@@ -54,11 +54,11 @@ public class DatabaseService : IDatabaseService
 		}
 	}
 
-	public async Task<IEnumerable<TodoItemViewModel>> GetTodoItemsByListIdAsync(int todoListId)
+	public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int todoListId)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == todoListId).ToListAsync();
-		return items.ToViewModels();
+		return items.ToViewModel();
 	}
 
 	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)

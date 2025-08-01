@@ -9,7 +9,7 @@ namespace Todo.Services.Abstraction.DatabaseServices
 		Task AddTodoListAsync(TodoListViewModel todoList);
 		Task UpdateTodoListAsync(TodoListViewModel list);
 		Task DeleteTodoListAsync(int id);
-		Task<IEnumerable<TodoItemViewModel>> GetTodoItemsByListIdAsync(int todoListId);
+		Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int todoListId);
 		Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id);
 		Task AddTodoItemAsync(TodoItemViewModel todoItem);
 		Task UpdateTodoItemAsync(TodoItemViewModel item);

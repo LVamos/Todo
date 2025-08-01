@@ -17,48 +17,82 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetTodoItemsByListId/{listId}")]
-		[ProducesResponseType(typeof(IEnumerable<TodoItemViewModel>), 200)]
-		public async Task<ActionResult<IEnumerable<TodoItemViewModel>>> GetTodoItemsByListId(int listId)
+		[ProducesResponseType(typeof(TodoItemsViewModel), 200)]
+		public async Task<TodoItemsViewModel> GetTodoItemsByListId(int listId)
 		{
-			IEnumerable<TodoItemViewModel> items = await _todoItemService.GetTodoItemsByListIdAsync(listId);
-			return Ok(items);
+			try
+			{
+				return await _todoItemService.GetTodoItemsByListIdAsync(listId);
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpGet("GetTodoItemById/{id}")]
 		[ProducesResponseType(typeof(TodoItemViewModel), 200)]
-		[ProducesResponseType(404)]
-		public async Task<ActionResult<TodoItemViewModel>> GetTodoItemById(int id)
+		public async Task<TodoItemViewModel> GetTodoItemById(int id)
 		{
-			TodoItemViewModel? item = await _todoItemService.GetTodoItemByIdAsync(id);
-			if (item == null)
-				return NotFound();
-			return Ok(item);
+			try
+			{
+				return await _todoItemService.GetTodoItemByIdAsync(id);
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpPost("AddTodoItem")]
-		[ProducesResponseType(201)]
-		public async Task<ActionResult> AddTodoItem([FromBody] TodoItemViewModel todoItem)
+		[ProducesResponseType(typeof(ErrorViewModel), 200)]
+		public async Task<ErrorViewModel> AddTodoItem([FromBody] TodoItemViewModel todoItem)
 		{
-			await _todoItemService.AddTodoItemAsync(todoItem);
-			return CreatedAtAction(nameof(GetTodoItemById), new { id = todoItem.Id }, todoItem);
+			try
+			{
+				await _todoItemService.AddTodoItemAsync(todoItem);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpPut("UpdateTodoItem/{id}")]
-		[ProducesResponseType(204)]
-		public async Task<ActionResult> UpdateTodoItem(int id, [FromBody] TodoItemViewModel todoItem)
+		[ProducesResponseType(typeof(ErrorViewModel), 200)]
+		public async Task<ErrorViewModel> UpdateTodoItem(int id, [FromBody] TodoItemViewModel todoItem)
 		{
 			if (id != todoItem.Id)
-				return BadRequest();
-			await _todoItemService.UpdateTodoItemAsync(todoItem);
-			return NoContent();
+				return new()
+				{
+					Error = "Bad request"
+				};
+
+			try
+			{
+				await _todoItemService.UpdateTodoItemAsync(todoItem);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpGet("DeleteTodoItem/{id}")]
-		[ProducesResponseType(204)]
-		public async Task<ActionResult> DeleteTodoItem(int id)
+		[ProducesResponseType(typeof(ErrorViewModel), 200)]
+		public async Task<ErrorViewModel> DeleteTodoItem(int id)
 		{
-			await _todoItemService.DeleteTodoItemAsync(id);
-			return NoContent();
+			try
+			{
+				await _todoItemService.DeleteTodoItemAsync(id);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 	}
 }

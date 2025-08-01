@@ -2,7 +2,7 @@
 
 namespace Todo.ViewModels.ViewModels;
 
-public class TodoItemViewModel
+public class TodoItemViewModel : ErrorViewModel
 {
 	public int Id { get; set; }
 	public string Title { get; set; }

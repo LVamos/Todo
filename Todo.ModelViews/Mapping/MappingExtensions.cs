@@ -97,8 +97,23 @@ namespace Todo.ViewModels.Mapping
 		/// </summary>
 		public static IEnumerable<TodoItemViewModel> ToViewModels(this IEnumerable<TodoItem> entities)
 		{
-			if (entities == null) return Enumerable.Empty<TodoItemViewModel>();
+			if (entities == null)
+				return Enumerable.Empty<TodoItemViewModel>();
+
 			return entities.Select(e => e.ToViewModel());
+		}
+
+		/// <summary>
+		/// Converts a collection of TodoItem entities to a list of TodoItemViewModels.
+		/// </summary>
+		public static TodoItemsViewModel ToViewModel(this IEnumerable<TodoItem> entities)
+		{
+			if (entities == null)
+				return null;
+			return new()
+			{
+				Items = entities.Select(e => e.ToViewModel())
+			};
 		}
 
 		/// <summary>
