@@ -8,10 +8,13 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts a list of TodoList entities to a list of TodoListViewModels.
 		/// </summary>
-		public static List<TodoListViewModel> ToViewModels(this List<TodoList> entities)
+		public static TodoListsViewModel ToViewModels(this List<TodoList> entities)
 		{
-			if (entities == null) return new List<TodoListViewModel>();
-			return entities.Select(e => e.ToViewModel()).ToList();
+			if (entities == null) return null;
+			return new TodoListsViewModel()
+			{
+				Lists = entities.Select(e => e.ToViewModel()).ToList()
+			};
 		}
 
 		/// <summary>

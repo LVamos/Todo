@@ -17,48 +17,82 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetAllTodoLists")]
-		[ProducesResponseType(typeof(IEnumerable<TodoListViewModel>), 200)]
-		public async Task<ActionResult<IEnumerable<TodoListViewModel>>> GetAllTodoLists()
+		[ProducesResponseType(typeof(TodoListsViewModel), 200)]
+		public async Task<TodoListsViewModel> GetAllTodoLists()
 		{
-			IEnumerable<TodoListViewModel> lists = await _todoListService.GetAllTodoListsAsync();
-			return Ok(lists);
+			try
+			{
+				return await _todoListService.GetAllTodoListsAsync();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpGet("GetTodoListById/{id}")]
 		[ProducesResponseType(typeof(TodoListViewModel), 200)]
-		[ProducesResponseType(404)]
-		public async Task<ActionResult<TodoListViewModel>> GetTodoListById(int id)
+		public async Task<TodoListViewModel> GetTodoListById(int id)
 		{
-			TodoListViewModel? list = await _todoListService.GetTodoListByIdAsync(id);
-			if (list == null)
-				return NotFound();
-			return Ok(list);
+			try
+			{
+				return await _todoListService.GetTodoListByIdAsync(id);
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpPost("AddTodoList")]
-		[ProducesResponseType(201)]
-		public async Task<ActionResult> AddTodoList([FromBody] TodoListViewModel todoList)
+		[ProducesResponseType(typeof(ErrorViewModel), 201)]
+		public async Task<ErrorViewModel> AddTodoList([FromBody] TodoListViewModel todoList)
 		{
-			await _todoListService.AddTodoListAsync(todoList);
-			return CreatedAtAction(nameof(GetTodoListById), new { id = todoList.Id }, todoList);
+			try
+			{
+				await _todoListService.AddTodoListAsync(todoList);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpPut("UpdateTodoList/{id}")]
-		[ProducesResponseType(204)]
-		public async Task<ActionResult> UpdateTodoList(int id, [FromBody] TodoListViewModel todoList)
+		[ProducesResponseType(typeof(ErrorViewModel), 200)]
+		public async Task<ErrorViewModel> UpdateTodoList(int id, [FromBody] TodoListViewModel todoList)
 		{
 			if (id != todoList.Id)
-				return BadRequest();
-			await _todoListService.UpdateTodoListAsync(todoList);
-			return NoContent();
+				return new()
+				{
+					Error = "Bad request"
+				};
+
+			try
+			{
+				await _todoListService.UpdateTodoListAsync(todoList);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 
 		[HttpGet("DeleteTodoList/{id}")]
-		[ProducesResponseType(204)]
-		public async Task<ActionResult> DeleteTodoList(int id)
+		[ProducesResponseType(typeof(ErrorViewModel), 200)]
+		public async Task<ErrorViewModel> DeleteTodoList(int id)
 		{
-			await _todoListService.DeleteTodoListAsync(id);
-			return Ok();
+			try
+			{
+				await _todoListService.DeleteTodoListAsync(id);
+				return new();
+			}
+			catch (Exception e)
+			{
+				return new() { Error = e.ToString() };
+			}
 		}
 	}
 }

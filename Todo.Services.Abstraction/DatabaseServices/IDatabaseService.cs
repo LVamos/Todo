@@ -4,7 +4,7 @@ namespace Todo.Services.Abstraction.DatabaseServices
 {
 	public interface IDatabaseService
 	{
-		Task<IEnumerable<TodoListViewModel>> GetAllTodoListsAsync();
+		Task<TodoListsViewModel> GetAllTodoListsAsync();
 		Task<TodoListViewModel?> GetTodoListByIdAsync(int id);
 		Task AddTodoListAsync(TodoListViewModel todoList);
 		Task UpdateTodoListAsync(TodoListViewModel list);

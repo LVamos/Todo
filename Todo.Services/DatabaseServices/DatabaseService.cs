@@ -11,7 +11,7 @@ namespace Todo.Services.DatabaseServices;
 
 public class DatabaseService : IDatabaseService
 {
-	public async Task<IEnumerable<TodoListViewModel>> GetAllTodoListsAsync()
+	public async Task<TodoListsViewModel> GetAllTodoListsAsync()
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		List<TodoList> lists = await context.TodoLists.Include(tl => tl.Items).ToListAsync();

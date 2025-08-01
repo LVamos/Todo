@@ -5,7 +5,7 @@ using Todo.ViewModels.ViewModels;
 namespace Todo.Services.Services;
 public class TodoListService : ITodoListService
 {
-	public async Task<IEnumerable<TodoListViewModel>> GetAllTodoListsAsync()
+	public async Task<TodoListsViewModel> GetAllTodoListsAsync()
 	{
 		try
 		{
