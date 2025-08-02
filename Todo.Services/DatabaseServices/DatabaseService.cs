@@ -11,6 +11,12 @@ namespace Todo.Services.DatabaseServices;
 
 public class DatabaseService : IDatabaseService
 {
+	public async Task<bool> TodoListExists(string listName)
+	{
+		TodoDbContext context = _contextFactory.GetDbContext();
+		return await context.TodoLists.AnyAsync(l => l.Name.ToLower() == listName.ToLower());
+	}
+
 	public async Task<TodoListsViewModel> GetAllTodoListsAsync()
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
@@ -22,7 +28,7 @@ public class DatabaseService : IDatabaseService
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList list = await context.TodoLists.Include(tl => tl.Items)
-								.FirstOrDefaultAsync(tl => tl.Id == id);
+								.FirstAsync(tl => tl.Id == id);
 		return list.ToViewModel();
 	}
 
@@ -47,24 +53,25 @@ public class DatabaseService : IDatabaseService
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList list = await context.TodoLists.FindAsync(id);
-		if (list != null)
-		{
-			context.TodoLists.Remove(list);
-			await context.SaveChangesAsync();
-		}
+		if (list == null)
+			throw new InvalidOperationException();
+		context.TodoLists.Remove(list);
+		await context.SaveChangesAsync();
 	}
 
-	public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int todoListId)
+	public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int listId)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == todoListId).ToListAsync();
+		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == listId).ToListAsync();
+		if (items == null || !items.Any())
+			throw new ArgumentException($"TodoList {listId} not found");
 		return items.ToViewModel();
 	}
 
 	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		TodoItem item = await context.TodoItems.FirstOrDefaultAsync(ti => ti.Id == id);
+		TodoItem item = await context.TodoItems.FirstAsync(ti => ti.Id == id);
 		return item.ToViewModel();
 	}
 
@@ -94,11 +101,12 @@ public class DatabaseService : IDatabaseService
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoItem item = await context.TodoItems.FindAsync(id);
-		if (item != null)
+		if (item == null)
 		{
-			context.TodoItems.Remove(item);
-			await context.SaveChangesAsync();
+			throw new InvalidOperationException();
 		}
+		context.TodoItems.Remove(item);
+		await context.SaveChangesAsync();
 	}
 
 	public DatabaseService(IContextFactory contextFactory)

@@ -33,6 +33,28 @@ public class TodoListService : ITodoListService
 
 	public async Task AddTodoListAsync(TodoListViewModel list)
 	{
+		if (string.IsNullOrEmpty(list.Name))
+		{
+			ArgumentNullException exception = new(nameof(list.Name));
+			_loggerService.LogError("TodoList must have a name");
+			throw exception;
+		}
+
+		if (await _databaseService.TodoListExists(list.Name))
+		{
+			string message = $"TodoList named {list.Name} already exists";
+			InvalidOperationException exception = new(message);
+			_loggerService.LogError(message, exception);
+			throw exception;
+		}
+
+		if (list.Items?.Count > 0)
+		{
+			InvalidOperationException exception = new("Cannot create TodoItems before the TodoList is saved.");
+			_loggerService.LogError($"Cannot create TodoItems before the TodoList is saved");
+			throw exception;
+		}
+
 		try
 		{
 			await _databaseService.AddTodoListAsync(list);
@@ -46,6 +68,13 @@ public class TodoListService : ITodoListService
 
 	public async Task UpdateTodoListAsync(TodoListViewModel list)
 	{
+		if (string.IsNullOrEmpty(list.Name))
+		{
+			ArgumentNullException exception = new(nameof(list.Name));
+			_loggerService.LogError("TodoList must have a name");
+			throw exception;
+		}
+
 		try
 		{
 			await _databaseService.UpdateTodoListAsync(list);

@@ -26,13 +26,32 @@ public class TodoItemService : ITodoItemService
 		}
 		catch (Exception e)
 		{
-			_loggerService.LogError($"Could not find a TodoItem {id}", e);
+			_loggerService.LogError($"TodoItem {id} not found", e);
 			throw;
 		}
 	}
 
 	public async Task AddTodoItemAsync(TodoItemViewModel item)
 	{
+		// Validate title
+		if (string.IsNullOrEmpty(item.Title))
+		{
+			ArgumentNullException exception = new(nameof(item.Title));
+			_loggerService.LogError($"TodoItem must have a title", exception);
+			throw exception;
+		}
+
+		// validate TodoList link
+		try
+		{
+			TodoListViewModel parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId);
+		}
+		catch (Exception)
+		{
+			_loggerService.LogError($"Adding TodoItem failed: TodoList {item.TodoListId} not found or couldn't be retrieved from database");
+			throw;
+		}
+
 		try
 		{
 			await _databaseService.AddTodoItemAsync(item);
@@ -46,6 +65,14 @@ public class TodoItemService : ITodoItemService
 
 	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
 	{
+		// Validate title
+		if (string.IsNullOrEmpty(item.Title))
+		{
+			ArgumentNullException exception = new(nameof(item.Title));
+			_loggerService.LogError($"TodoItem must have a title", exception);
+			throw exception;
+		}
+
 		try
 		{
 			await _databaseService.UpdateTodoItemAsync(item);
@@ -73,10 +100,12 @@ public class TodoItemService : ITodoItemService
 
 	private ILoggerService _loggerService;
 	private IDatabaseService _databaseService;
+	private ITodoListService _todoListService;
 
-	public TodoItemService(ILoggerService loggerService, IDatabaseService databaseService)
+	public TodoItemService(ILoggerService loggerService, IDatabaseService databaseService, ITodoListService todoListService)
 	{
 		_loggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
 		_databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+		_todoListService = todoListService;
 	}
 }

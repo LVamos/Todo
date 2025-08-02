@@ -59,16 +59,10 @@ namespace Todo.API.Controllers
 			}
 		}
 
-		[HttpPut("UpdateTodoItem/{id}")]
+		[HttpPut("UpdateTodoItem")]
 		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> UpdateTodoItem(int id, [FromBody] TodoItemViewModel todoItem)
+		public async Task<ErrorViewModel> UpdateTodoItem([FromBody] TodoItemViewModel todoItem)
 		{
-			if (id != todoItem.Id)
-				return new()
-				{
-					Error = "Bad request"
-				};
-
 			try
 			{
 				await _todoItemService.UpdateTodoItemAsync(todoItem);

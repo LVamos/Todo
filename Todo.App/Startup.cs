@@ -27,7 +27,7 @@ public class Startup
 			.AddJsonOptions(options =>
 			{
 				// Adding JSON serialization with support for cyclic references
-				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 			});
 
 	}
@@ -53,8 +53,6 @@ public class Startup
 		}
 
 		app.UseHttpsRedirection();
-
-		// Správné pořadí middleware
 		app.UseRouting();
 		app.UseAuthorization();
 		app.MapControllers();

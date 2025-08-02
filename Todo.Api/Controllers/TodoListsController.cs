@@ -22,7 +22,8 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				return await _todoListService.GetAllTodoListsAsync();
+				TodoListsViewModel result = await _todoListService.GetAllTodoListsAsync();
+				return result;
 			}
 			catch (Exception e)
 			{
@@ -59,16 +60,10 @@ namespace Todo.API.Controllers
 			}
 		}
 
-		[HttpPut("UpdateTodoList/{id}")]
+		[HttpPut("UpdateTodoList")]
 		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> UpdateTodoList(int id, [FromBody] TodoListViewModel todoList)
+		public async Task<ErrorViewModel> UpdateTodoList([FromBody] TodoListViewModel todoList)
 		{
-			if (id != todoList.Id)
-				return new()
-				{
-					Error = "Bad request"
-				};
-
 			try
 			{
 				await _todoListService.UpdateTodoListAsync(todoList);
