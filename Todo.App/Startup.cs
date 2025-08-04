@@ -26,7 +26,6 @@ public class Startup
 			.AddApplicationPart(typeof(AssemblyMarker).Assembly) // Set location of controllers
 			.AddJsonOptions(options =>
 			{
-				// Adding JSON serialization with support for cyclic references
 				options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 			});
 

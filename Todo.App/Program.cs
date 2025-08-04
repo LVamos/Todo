@@ -20,6 +20,7 @@ Startup startup = new(builder.Configuration);
 startup.ConfigureServices(builder.Services);
 
 WebApplication app = builder.Build();
+IocContainerProvider.ServiceProvider = app.Services;
 IContextFactory factory = app.Services.GetService<IContextFactory>();
 using (TodoDbContext dbContext = factory.GetDbContext())
 {
