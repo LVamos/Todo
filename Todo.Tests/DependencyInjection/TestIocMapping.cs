@@ -15,7 +15,7 @@ using Todo.Services.Services;
 namespace Todo.Tests.DependencyInjection;
 public class TestIocMapping : IocMapping
 {
-	protected new void RegisterCommunicationServices(ContainerBuilder builder)
+	protected override void RegisterCommunicationServices(ContainerBuilder builder)
 	{
 	}
 
@@ -23,7 +23,7 @@ public class TestIocMapping : IocMapping
 	///     Registers services related to server communication.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected new void RegisterServerServices(ContainerBuilder builder)
+	protected override void RegisterServerServices(ContainerBuilder builder)
 	{
 	}
 
@@ -31,17 +31,17 @@ public class TestIocMapping : IocMapping
 	///     Installs a DI container.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	public new void Install(IConfiguration configuration, ContainerBuilder builder)
+	public override void Install(IConfiguration configuration, ContainerBuilder builder)
 	{
+		RegisterConfigurationServices(configuration, builder);
 		RegisterBackgroundServices(builder);
 		RegisterDatabaseServices(configuration, builder);
-		RegisterConfigurationServices(configuration, builder);
 		RegisterCommunicationServices(builder);
 		RegisterServerServices(builder);
 		RegisterBusinessServices(builder);
 	}
 
-	protected new void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
+	protected override void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
 		string connectionString = configuration.GetConnectionString("DefaultConnection");
 		builder.Register(ctx =>
@@ -59,7 +59,7 @@ public class TestIocMapping : IocMapping
 	///     Registers services related to configurations.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected new void RegisterConfigurationServices(IConfiguration configuration, ContainerBuilder builder)
+	protected override void RegisterConfigurationServices(IConfiguration configuration, ContainerBuilder builder)
 	{
 		builder.Register(x => configuration.GetSection(TodoSettings.SectionName).Get<TodoSettings>())
 			.As<TodoSettings>();
@@ -69,7 +69,7 @@ public class TestIocMapping : IocMapping
 	///     Registers background services.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected new void RegisterBackgroundServices(ContainerBuilder builder)
+	protected override void RegisterBackgroundServices(ContainerBuilder builder)
 	{
 	}
 
@@ -77,7 +77,7 @@ public class TestIocMapping : IocMapping
 	///     Registers services related to business logic.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected new void RegisterBusinessServices(ContainerBuilder builder)
+	protected override void RegisterBusinessServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<LoggerService>().As<ILoggerService>();
 		builder.RegisterType<TodoListService>().As<ITodoListService>();

@@ -18,7 +18,7 @@ namespace Todo.ServerConfigurations.DependencyInjection;
 /// </summary>
 public class IocMapping
 {
-	protected void RegisterCommunicationServices(ContainerBuilder builder)
+	protected virtual void RegisterCommunicationServices(ContainerBuilder builder)
 	{
 	}
 
@@ -34,7 +34,7 @@ public class IocMapping
 	///     Installs a DI container.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	public void Install(IConfiguration configuration, ContainerBuilder builder)
+	public virtual void Install(IConfiguration configuration, ContainerBuilder builder)
 	{
 		RegisterBackgroundServices(builder);
 		RegisterDatabaseServices(configuration, builder);
@@ -62,7 +62,7 @@ public class IocMapping
 	///     Registers services related to configurations.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected void RegisterConfigurationServices(IConfiguration configuration, ContainerBuilder builder)
+	protected virtual void RegisterConfigurationServices(IConfiguration configuration, ContainerBuilder builder)
 	{
 		builder.Register(x => configuration.GetSection(TodoSettings.SectionName).Get<TodoSettings>())
 			.As<TodoSettings>();
@@ -72,7 +72,7 @@ public class IocMapping
 	///     Registers background services.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected void RegisterBackgroundServices(ContainerBuilder builder)
+	protected virtual void RegisterBackgroundServices(ContainerBuilder builder)
 	{
 	}
 
@@ -80,7 +80,7 @@ public class IocMapping
 	///     Registers services related to business logic.
 	/// </summary>
 	/// <param name="builder">A container builder</param>
-	protected void RegisterBusinessServices(ContainerBuilder builder)
+	protected virtual void RegisterBusinessServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<LoggerService>().As<ILoggerService>();
 		builder.RegisterType<TodoListService>().As<ITodoListService>();
