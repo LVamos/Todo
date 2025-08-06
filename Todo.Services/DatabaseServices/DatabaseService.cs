@@ -11,7 +11,7 @@ namespace Todo.Services.DatabaseServices;
 
 public class DatabaseService : IDatabaseService
 {
-	public async Task<bool> TodoListExists(string listName)
+	public async Task<bool> TodoListExistsAsync(string listName)
 	{
 		TodoDbContext context = _contextFactory.GetDbContext();
 		return await context.TodoLists.AnyAsync(l => l.Name.ToLower() == listName.ToLower());

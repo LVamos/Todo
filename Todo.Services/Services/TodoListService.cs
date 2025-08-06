@@ -40,7 +40,7 @@ public class TodoListService : ITodoListService
 			throw exception;
 		}
 
-		if (await _databaseService.TodoListExists(list.Name))
+		if (await _databaseService.TodoListExistsAsync(list.Name))
 		{
 			string message = $"TodoList named {list.Name} already exists";
 			InvalidOperationException exception = new(message);

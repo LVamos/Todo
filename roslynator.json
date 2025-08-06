@@ -1,0 +1,5 @@
+{
+  "diagnosticFixes": {
+    "RCS1016": "fix",    // Use explicit type instead of var
+  }
+}

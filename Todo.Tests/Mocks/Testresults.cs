@@ -1,14 +1,23 @@
-﻿namespace Todo.Tests.Mocks;
-public static class Testresults
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Todo.ViewModels.ViewModels;
+
+namespace Todo.Tests.Mocks;
+public static class TestResults
 {
-	static TestResults()
-	{
-
-	}
-
-	public static Dictionary<string, ResultType> DataSets { get; set; } = new();
-	public static readonly Dictionary<(string, ResultType), object> PredefinedData = new();
-	public static Dictionary<string, object> Results = new();
-
-
+    public static bool? TodoListExists;
+    public static TodoListsViewModel GetAllTodoLists;
+    public static TodoListViewModel? GetTodoListById;
+    public static bool AddTodoList;
+    public static bool UpdateTodoList;
+    public static bool DeleteTodoList;
+    public static TodoItemsViewModel GetTodoItemsByListId;
+    public static TodoItemViewModel? GetTodoItemById;
+    public static bool AddTodoItem;
+    public static bool UpdateTodoItem;
+    public static Boolean DeleteTodoItem;
 }
