@@ -163,8 +163,8 @@ public static class TestData
 
 	public static TestScenario<bool?> TodoListExistsResult { get; } = new()
 	{
-		[ResultType.Valid] = true,
-		[ResultType.Limit] = true,
+		[ResultType.Valid] = false,
+		[ResultType.Limit] = false,
 		[ResultType.Invalid] = null
 	};
 

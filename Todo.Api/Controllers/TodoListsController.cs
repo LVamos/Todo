@@ -54,7 +54,7 @@ namespace Todo.API.Controllers
 				await _todoListService.AddTodoListAsync(todoList);
 				return new();
 			}
-			catch (Exception e)
+		catch (Exception e)
 			{
 				return new() { Error = e.ToString() };
 			}

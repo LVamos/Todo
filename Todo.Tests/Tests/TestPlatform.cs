@@ -3,15 +3,28 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
+using Newtonsoft.Json;
+
+using System.Text;
+
 using Todo.App;
 using Todo.App.Helpers;
 using Todo.Constants.Settings;
+using Todo.ViewModels.ViewModels;
 
 namespace Todo.Tests.Tests;
 [SetUpFixture]
 public class TestPlatform
 {
-	public static HttpClient Client;
+    public static async Task<HttpResponseMessage> PostAsync(object obj, String uri)
+    {
+        string json = JsonConvert.SerializeObject(obj);
+        StringContent content = new(json, Encoding.UTF8,
+            "application/json");
+        return await TestPlatform.Client.PostAsync(uri, content);
+    }
+
+    public static HttpClient Client;
 	public static TestServer Server;
 
 	[OneTimeSetUp]
