@@ -11,6 +11,7 @@ using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
 using Todo.Services.DatabaseServices;
 using Todo.Services.Services;
+using Todo.Tests.Mocks;
 
 namespace Todo.Tests.DependencyInjection;
 public class TestIocMapping : IocMapping
@@ -43,16 +44,7 @@ public class TestIocMapping : IocMapping
 
 	protected override void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
 	{
-		string connectionString = configuration.GetConnectionString("DefaultConnection");
-		builder.Register(ctx =>
-		{
-			DbContextOptionsBuilder<TodoDbContext> optionsBuilder = new();
-			optionsBuilder.UseSqlServer(connectionString);
-			return optionsBuilder.Options;
-		}).As<DbContextOptions<TodoDbContext>>().SingleInstance();
-
-		builder.RegisterType<ContextFactory>().As<IContextFactory>();
-		builder.RegisterType<DatabaseService>().As<IDatabaseService>();
+		builder.RegisterType<TestDatabaseService>().As<IDatabaseService>();
 	}
 
 	/// <summary>
