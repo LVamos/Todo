@@ -19,6 +19,108 @@ namespace Todo.Tests.Tests;
 public class TodoListsControllerTests
 {
     [Test]
+    public async Task GetTodoListByIdTestValid()
+    {
+        TodoListViewModel result = await GetTodoListByIdAsync(ResultType.Valid, 1);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Name, Is.EqualTo("Pracovní úkoly"));
+        Assert.That(result.Id, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task GetTodoListByIdTestLimit()
+    {
+        TodoListViewModel result = await GetTodoListByIdAsync(ResultType.Limit, int.MaxValue);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Name, Is.EqualTo("Maximální ID seznam"));
+        Assert.That(result.Id, Is.EqualTo(int.MaxValue));
+    }
+
+    [Test]
+    public async Task GetTodoListByIdTestInvalid()
+    {
+        TodoListViewModel result = await GetTodoListByIdAsync(ResultType.Invalid, -1);
+        Assert.That(result, Is.Null);
+    }
+
+    [Test]
+    public async Task UpdateTodoListTestValid()
+    {
+        TodoListViewModel list = new()
+        {
+            Id = 1,
+            Name = "Updated List"
+        };
+        bool result = await UpdateTodoListAsync(ResultType.Valid, list);
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public async Task UpdateTodoListTestLimit()
+    {
+        TodoListViewModel list = new()
+        {
+            Id = int.MaxValue,
+            Name = "Limit List"
+        };
+        bool result = await UpdateTodoListAsync(ResultType.Limit, list);
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public async Task UpdateTodoListTestInvalid()
+    {
+        TodoListViewModel list = new();
+        bool result = await UpdateTodoListAsync(ResultType.Invalid, list);
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public async Task DeleteTodoListTestValid()
+    {
+        bool result = await DeleteTodoListAsync(ResultType.Valid, 1);
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public async Task DeleteTodoListTestLimit()
+    {
+        bool result = await DeleteTodoListAsync(ResultType.Limit, int.MaxValue);
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public async Task DeleteTodoListTestInvalid()
+    {
+        bool result = await DeleteTodoListAsync(ResultType.Invalid, -1);
+        Assert.That(result, Is.False);
+    }
+
+    private static async Task<TodoListViewModel> GetTodoListByIdAsync(ResultType scenario, int id)
+    {
+        TestData.CurrentScenario = scenario;
+        String uri = $"api/TodoLists/GetTodoListById/{id}";
+        await TestPlatform.Client.GetAsync(uri);
+        return TestResults.GetTodoListById;
+    }
+
+    private static async Task<bool> UpdateTodoListAsync(ResultType scenario, TodoListViewModel list)
+    {
+        TestData.CurrentScenario = scenario;
+        String uri = "api/TodoLists/UpdateTodoList";
+        await TestPlatform.PutAsync(list, uri);
+        return TestResults.UpdateTodoList;
+    }
+
+    private static async Task<bool> DeleteTodoListAsync(ResultType scenario, int id)
+    {
+        TestData.CurrentScenario = scenario;
+        String uri = $"api/TodoLists/DeleteTodoList/{id}";
+        await TestPlatform.Client.GetAsync(uri);
+        return TestResults.DeleteTodoList;
+    }
+
+    [Test]
     public async Task AddTodoListTestLimit()
     {
         TodoListViewModel list = new()

@@ -24,6 +24,14 @@ public class TestPlatform
         return await TestPlatform.Client.PostAsync(uri, content);
     }
 
+    public static async Task<HttpResponseMessage> PutAsync(object obj, String uri)
+    {
+        string json = JsonConvert.SerializeObject(obj);
+        StringContent content = new(json, Encoding.UTF8,
+            "application/json");
+        return await TestPlatform.Client.PutAsync(uri, content);
+    }
+
     public static HttpClient Client;
 	public static TestServer Server;
 
