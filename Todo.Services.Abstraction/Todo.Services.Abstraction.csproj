@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
-    <ProjectReference Include="..\Todo.ModelViews\Todo.ViewModels.csproj" />
+    <ProjectReference Include="..\Todo.ModelViews\Todo.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

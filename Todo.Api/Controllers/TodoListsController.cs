@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.Services;
-using Todo.ViewModels.ViewModels;
 
 namespace Todo.API.Controllers
 {
@@ -17,12 +18,12 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetAllTodoLists")]
-		[ProducesResponseType(typeof(TodoListsViewModel), 200)]
-		public async Task<TodoListsViewModel> GetAllTodoLists()
+		[ProducesResponseType(typeof(TodoListsResponse), 200)]
+		public async Task<TodoListsResponse> GetAllTodoLists()
 		{
 			try
 			{
-				TodoListsViewModel result = await _todoListService.GetAllTodoListsAsync();
+				TodoListsResponse result = await _todoListService.GetAllTodoListsAsync();
 				return result;
 			}
 			catch (Exception e)
@@ -32,8 +33,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetTodoListById/{id}")]
-		[ProducesResponseType(typeof(TodoListViewModel), 200)]
-		public async Task<TodoListViewModel> GetTodoListById(int id)
+		[ProducesResponseType(typeof(TodoListResponse), 200)]
+		public async Task<TodoListResponse> GetTodoListById(int id)
 		{
 			try
 			{
@@ -46,8 +47,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpPost("AddTodoList")]
-		[ProducesResponseType(typeof(ErrorViewModel), 201)]
-		public async Task<ErrorViewModel> AddTodoList([FromBody] TodoListViewModel todoList)
+		[ProducesResponseType(typeof(ErrorResponse), 201)]
+		public async Task<ErrorResponse> AddTodoList([FromBody] TodoListRequest todoList)
 		{
 			try
 			{
@@ -61,8 +62,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpPut("UpdateTodoList")]
-		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> UpdateTodoList([FromBody] TodoListViewModel todoList)
+		[ProducesResponseType(typeof(ErrorResponse), 200)]
+		public async Task<ErrorResponse> UpdateTodoList([FromBody] TodoListRequest todoList)
 		{
 			try
 			{
@@ -76,8 +77,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("DeleteTodoList/{id}")]
-		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> DeleteTodoList(int id)
+		[ProducesResponseType(typeof(ErrorResponse), 200)]
+		public async Task<ErrorResponse> DeleteTodoList(int id)
 		{
 			try
 			{

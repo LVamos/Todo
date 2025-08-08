@@ -1,5 +1,6 @@
-﻿using Todo.Entities.Entities;
-using Todo.ViewModels.ViewModels;
+﻿using Todo.Contracts.Contracts.Responses;
+using Todo.Entities.Entities;
+
 
 namespace Todo.Tests.Mocks;
 public static class TestData
@@ -28,9 +29,9 @@ public static class TestData
     };
 
 
-    public static TestScenario<TodoItemViewModel?> GetTodoItemByIdResult { get; } = new()
+    public static TestScenario<TodoItemResponse?> GetTodoItemByIdResult { get; } = new()
     {
-        [ResultType.Valid] = new TodoItemViewModel
+        [ResultType.Valid] = new TodoItemResponse
         {
             Id = 1,
             Title = "Připravit prezentaci",
@@ -40,7 +41,7 @@ public static class TestData
             Comment = "Zaměřit se na důležité body",
             TodoListId = 1
         },
-        [ResultType.Limit] = new TodoItemViewModel
+        [ResultType.Limit] = new TodoItemResponse
         {
             Id = int.MaxValue,
             Title = "Testovací úkol s maximálním ID",
@@ -54,11 +55,11 @@ public static class TestData
     };
 
 
-    public static TestScenario<TodoItemsViewModel> GetTodoItemsByListIdResult { get; } = new()
+    public static TestScenario<TodoItemsResponse> GetTodoItemsByListIdResult { get; } = new()
 	{
-		[ResultType.Valid] = new TodoItemsViewModel
+		[ResultType.Valid] = new TodoItemsResponse
 		{
-			Items = new List<TodoItemViewModel>
+			Items = new List<TodoItemResponse>
 		{
 			new()
 			{
@@ -82,9 +83,9 @@ public static class TestData
 			}
 		}
 		},
-		[ResultType.Limit] = new TodoItemsViewModel
+		[ResultType.Limit] = new TodoItemsResponse
 		{
-			Items = Enumerable.Range(1, 1000).Select(i => new TodoItemViewModel
+			Items = Enumerable.Range(1, 1000).Select(i => new TodoItemResponse
 			{
 				Id = i,
 				Title = $"Úkol {i}",
@@ -123,15 +124,15 @@ public static class TestData
 	};
 
 
-	public static TestScenario<TodoListViewModel?> GetTodoListByIdResult { get; } = new()
+	public static TestScenario<TodoListResponse?> GetTodoListByIdResult { get; } = new()
 	{
-		[ResultType.Valid] = new TodoListViewModel
+		[ResultType.Valid] = new TodoListResponse
 		{
 			Id = 1,
 			Name = "Pracovní úkoly"
 		},
 
-		[ResultType.Limit] = new TodoListViewModel
+		[ResultType.Limit] = new TodoListResponse
 		{
 			Id = int.MaxValue,
 			Name = "Maximální ID seznam"
@@ -140,19 +141,19 @@ public static class TestData
 		[ResultType.Invalid] = null
 	};
 
-	public static TestScenario<TodoListsViewModel> GetAllTodoListsResults { get; } = new()
+	public static TestScenario<TodoListsResponse> GetAllTodoListsResults { get; } = new()
 	{
-		[ResultType.Valid] = new TodoListsViewModel
+		[ResultType.Valid] = new TodoListsResponse
 		{
-			Lists = new List<TodoListViewModel>
+			Lists = new List<TodoListResponse>
 			{
-				new TodoListViewModel { Id = 1, Name = "Shopping" },
-				new TodoListViewModel { Id = 2, Name = "Work" }
+				new TodoListResponse { Id = 1, Name = "Shopping" },
+				new TodoListResponse { Id = 2, Name = "Work" }
 			}
 		},
-		[ResultType.Limit] = new TodoListsViewModel
+		[ResultType.Limit] = new TodoListsResponse
 		{
-			Lists = Enumerable.Range(1, 1000).Select(i => new TodoListViewModel
+			Lists = Enumerable.Range(1, 1000).Select(i => new TodoListResponse
 			{
 				Id = i,
 				Name = $"Seznam {i}"

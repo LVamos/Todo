@@ -1,11 +1,13 @@
-﻿using Todo.Services.Abstraction.DatabaseServices;
+﻿using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
+using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
-using Todo.ViewModels.ViewModels;
+
 
 namespace Todo.Services.Services;
 public class TodoListService : ITodoListService
 {
-	public async Task<TodoListsViewModel> GetAllTodoListsAsync()
+	public async Task<TodoListsResponse> GetAllTodoListsAsync()
 	{
 		try
 		{
@@ -18,7 +20,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task<TodoListViewModel?> GetTodoListByIdAsync(int id)
+	public async Task<TodoListResponse?> GetTodoListByIdAsync(int id)
 	{
 		try
 		{
@@ -31,7 +33,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task AddTodoListAsync(TodoListViewModel list)
+	public async Task AddTodoListAsync(TodoListRequest list)
 	{
 		if (string.IsNullOrEmpty(list.Name))
 		{
@@ -66,7 +68,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task UpdateTodoListAsync(TodoListViewModel list)
+	public async Task UpdateTodoListAsync(TodoListRequest list)
 	{
 		if (string.IsNullOrEmpty(list.Name))
 		{

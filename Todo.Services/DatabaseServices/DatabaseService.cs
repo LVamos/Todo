@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
 using Todo.Dal.Abstraction;
 using Todo.Dal.Context;
 using Todo.Entities.Entities;
 using Todo.Services.Abstraction.DatabaseServices;
 using Todo.ViewModels.Mapping;
-using Todo.ViewModels.ViewModels;
+
 
 namespace Todo.Services.DatabaseServices;
 
@@ -17,29 +19,29 @@ public class DatabaseService : IDatabaseService
 		return await context.TodoLists.AnyAsync(l => l.Name.ToLower() == listName.ToLower());
 	}
 
-	public async Task<TodoListsViewModel> GetAllTodoListsAsync()
+	public async Task<TodoListsResponse> GetAllTodoListsAsync()
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		List<TodoList> lists = await context.TodoLists.Include(tl => tl.Items).ToListAsync();
-		return lists.ToViewModels();
+		return lists.ToResponses();
 	}
 
-	public async Task<TodoListViewModel?> GetTodoListByIdAsync(int id)
+	public async Task<TodoListResponse?> GetTodoListByIdAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList list = await context.TodoLists.Include(tl => tl.Items)
 								.FirstAsync(tl => tl.Id == id);
-		return list.ToViewModel();
+		return list.ToResponse();
 	}
 
-	public async Task AddTodoListAsync(TodoListViewModel todoList)
+	public async Task AddTodoListAsync(TodoListRequest todoList)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		context.TodoLists.Add(todoList.ToEntity());
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoListAsync(TodoListViewModel list)
+	public async Task UpdateTodoListAsync(TodoListRequest list)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList existing = await context.TodoLists.FindAsync(list.Id);
@@ -59,30 +61,30 @@ public class DatabaseService : IDatabaseService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int listId)
+	public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == listId).ToListAsync();
 		if (items == null || !items.Any())
 			throw new ArgumentException($"TodoList {listId} not found");
-		return items.ToViewModel();
+		return items.ToResponse();
 	}
 
-	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
+	public async Task<TodoItemResponse?> GetTodoItemByIdAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoItem item = await context.TodoItems.FirstAsync(ti => ti.Id == id);
-		return item.ToViewModel();
+		return item.ToResponse();
 	}
 
-	public async Task AddTodoItemAsync(TodoItemViewModel todoItem)
+	public async Task AddTodoItemAsync(TodoItemRequest todoItem)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		context.TodoItems.Add(todoItem.ToEntity());
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
+	public async Task UpdateTodoItemAsync(TodoItemRequest item)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoItem existing = await context.TodoItems.FindAsync(item.Id);
