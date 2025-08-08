@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Query.Internal;
 
+using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.DatabaseServices;
-using Todo.ViewModels.ViewModels;
+
 
 namespace Todo.Tests.Mocks;
 
@@ -16,21 +18,21 @@ public class TestDatabaseService : IDatabaseService
         else return result.Value;
     }
 
-    public async Task<TodoListsViewModel> GetAllTodoListsAsync()
+    public async Task<TodoListsResponse> GetAllTodoListsAsync()
     {
-        TodoListsViewModel result = TestData.GetData(TestData.GetAllTodoListsResults);
+        TodoListsResponse result = TestData.GetData(TestData.GetAllTodoListsResults);
         TestResults.GetAllTodoLists = result;
         return result;
     }
 
-    public async Task<TodoListViewModel?> GetTodoListByIdAsync(int id)
+    public async Task<TodoListResponse?> GetTodoListByIdAsync(int id)
     {
-        TodoListViewModel result = TestData.GetData(TestData.GetTodoListByIdResult);
+        TodoListResponse result = TestData.GetData(TestData.GetTodoListByIdResult);
         TestResults.GetTodoListById = result;
         return result ?? throw new InvalidOperationException();
     }
 
-    public async Task AddTodoListAsync(TodoListViewModel todoList)
+    public async Task AddTodoListAsync(TodoListRequest todoList)
     {
         bool result = TestData.GetData(TestData.AddTodoListResult);
         TestResults.AddTodoList = result;
@@ -38,7 +40,7 @@ public class TestDatabaseService : IDatabaseService
             throw new InvalidOperationException();
     }
 
-    public async Task UpdateTodoListAsync(TodoListViewModel list)
+    public async Task UpdateTodoListAsync(TodoListRequest list)
     {
         bool result = TestData.GetData(TestData.UpdateTodoListResult);
         TestResults.UpdateTodoList = result;
@@ -54,21 +56,21 @@ public class TestDatabaseService : IDatabaseService
             throw new InvalidOperationException();
     }
 
-    public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int listId)
+    public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId)
     {
-        TodoItemsViewModel result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
+        TodoItemsResponse result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
         TestResults.GetTodoItemsByListId = result;
         return result ?? throw new ArgumentException(nameof(listId));
     }
 
-    public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
+    public async Task<TodoItemResponse?> GetTodoItemByIdAsync(int id)
     {
-        TodoItemViewModel result = TestData.GetData(TestData.GetTodoItemByIdResult);
+        TodoItemResponse result = TestData.GetData(TestData.GetTodoItemByIdResult);
         TestResults.GetTodoItemById = result;
         return result ?? throw new ArgumentException(nameof(id));
     }
 
-    public async Task AddTodoItemAsync(TodoItemViewModel item)
+    public async Task AddTodoItemAsync(TodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.AddTodoItemResult);
         TestResults.AddTodoItem = result;
@@ -76,7 +78,7 @@ public class TestDatabaseService : IDatabaseService
             throw new ArgumentException(nameof(item));
     }
 
-    public async Task UpdateTodoItemAsync(TodoItemViewModel item)
+    public async Task UpdateTodoItemAsync(TodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.UpdateTodoItemResult);
         TestResults.UpdateTodoItem = result;

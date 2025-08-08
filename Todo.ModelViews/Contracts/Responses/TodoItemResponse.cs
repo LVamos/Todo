@@ -1,8 +1,8 @@
 ﻿using Todo.Entities.Entities;
 
-namespace Todo.ViewModels.ViewModels;
+namespace Todo.Contracts.Contracts.Responses;
 
-public class TodoItemViewModel : ErrorViewModel
+public class TodoItemResponse : ErrorResponse
 {
 	public int Id { get; set; }
 	public string Title { get; set; }

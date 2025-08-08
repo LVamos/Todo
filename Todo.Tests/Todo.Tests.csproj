@@ -40,7 +40,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Todo.App\Todo.App.csproj" />
-    <ProjectReference Include="..\Todo.ModelViews\Todo.ViewModels.csproj" />
+    <ProjectReference Include="..\Todo.ModelViews\Todo.Contracts.csproj" />
     <ProjectReference Include="..\Todo.ServerConfigurations\Todo.ServerConfigurations.csproj" />
   </ItemGroup>
 

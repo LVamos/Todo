@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.Services;
-using Todo.ViewModels.ViewModels;
+
 
 namespace Todo.API.Controllers
 {
@@ -17,8 +19,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetTodoItemsByListId/{listId}")]
-		[ProducesResponseType(typeof(TodoItemsViewModel), 200)]
-		public async Task<TodoItemsViewModel> GetTodoItemsByListId(int listId)
+		[ProducesResponseType(typeof(TodoItemsResponse), 200)]
+		public async Task<TodoItemsResponse> GetTodoItemsByListId(int listId)
 		{
 			try
 			{
@@ -31,8 +33,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("GetTodoItemById/{id}")]
-		[ProducesResponseType(typeof(TodoItemViewModel), 200)]
-		public async Task<TodoItemViewModel> GetTodoItemById(int id)
+		[ProducesResponseType(typeof(TodoItemResponse), 200)]
+		public async Task<TodoItemResponse> GetTodoItemById(int id)
 		{
 			try
 			{
@@ -45,12 +47,12 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpPost("AddTodoItem")]
-		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> AddTodoItem([FromBody] TodoItemViewModel todoItem)
+		[ProducesResponseType(typeof(ErrorResponse), 200)]
+		public async Task<ErrorResponse> AddTodoItem([FromBody] TodoItemRequest item)
 		{
 			try
 			{
-				await _todoItemService.AddTodoItemAsync(todoItem);
+				await _todoItemService.AddTodoItemAsync(item);
 				return new();
 			}
 			catch (Exception e)
@@ -60,12 +62,12 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpPut("UpdateTodoItem")]
-		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> UpdateTodoItem([FromBody] TodoItemViewModel todoItem)
+		[ProducesResponseType(typeof(ErrorResponse), 200)]
+		public async Task<ErrorResponse> UpdateTodoItem([FromBody] TodoItemRequest item)
 		{
 			try
 			{
-				await _todoItemService.UpdateTodoItemAsync(todoItem);
+				await _todoItemService.UpdateTodoItemAsync(item);
 				return new();
 			}
 			catch (Exception e)
@@ -75,8 +77,8 @@ namespace Todo.API.Controllers
 		}
 
 		[HttpGet("DeleteTodoItem/{id}")]
-		[ProducesResponseType(typeof(ErrorViewModel), 200)]
-		public async Task<ErrorViewModel> DeleteTodoItem(int id)
+		[ProducesResponseType(typeof(ErrorResponse), 200)]
+		public async Task<ErrorResponse> DeleteTodoItem(int id)
 		{
 			try
 			{

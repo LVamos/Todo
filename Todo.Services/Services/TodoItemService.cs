@@ -1,11 +1,13 @@
-﻿using Todo.Services.Abstraction.DatabaseServices;
+﻿using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
+using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
-using Todo.ViewModels.ViewModels;
+
 
 namespace Todo.Services.Services;
 public class TodoItemService : ITodoItemService
 {
-	public async Task<TodoItemsViewModel> GetTodoItemsByListIdAsync(int listId)
+	public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId)
 	{
 		try
 		{
@@ -18,7 +20,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task<TodoItemViewModel?> GetTodoItemByIdAsync(int id)
+	public async Task<TodoItemResponse?> GetTodoItemByIdAsync(int id)
 	{
 		try
 		{
@@ -31,7 +33,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task AddTodoItemAsync(TodoItemViewModel item)
+	public async Task AddTodoItemAsync(TodoItemRequest item)
 	{
 		// Validate title
 		if (string.IsNullOrEmpty(item.Title))
@@ -44,7 +46,7 @@ public class TodoItemService : ITodoItemService
 		// validate TodoList link
 		try
 		{
-			TodoListViewModel parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId);
+			TodoListResponse parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId);
 		}
 		catch (Exception)
 		{
@@ -63,7 +65,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItemViewModel item)
+	public async Task UpdateTodoItemAsync(TodoItemRequest item)
 	{
 		// Validate title
 		if (string.IsNullOrEmpty(item.Title))

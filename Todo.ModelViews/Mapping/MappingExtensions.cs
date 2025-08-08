@@ -1,5 +1,7 @@
-﻿using Todo.Entities.Entities;
-using Todo.ViewModels.ViewModels;
+﻿using Todo.Contracts.Contracts.Requests;
+using Todo.Contracts.Contracts.Responses;
+using Todo.Entities.Entities;
+
 
 namespace Todo.ViewModels.Mapping
 {
@@ -8,32 +10,32 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts a list of TodoList entities to a list of TodoListViewModels.
 		/// </summary>
-		public static TodoListsViewModel ToViewModels(this List<TodoList> entities)
+		public static TodoListsResponse ToResponses(this List<TodoList> entities)
 		{
 			if (entities == null) return null;
-			return new TodoListsViewModel()
+			return new TodoListsResponse()
 			{
-				Lists = entities.Select(e => e.ToViewModel()).ToList()
+				Lists = entities.Select(e => e.ToResponse()).ToList()
 			};
 		}
 
 		/// <summary>
 		/// Converts a list of TodoListViewModels to a list of TodoList entities.
 		/// </summary>
-		public static List<TodoList> ToEntities(this List<TodoListViewModel> viewModels)
+		public static List<TodoList> ToEntities(this List<TodoListRequest> request)
 		{
-			if (viewModels == null) return new List<TodoList>();
-			return viewModels.Select(vm => vm.ToEntity()).ToList();
+			if (request == null) return new List<TodoList>();
+			return request.Select(vm => vm.ToEntity()).ToList();
 		}
 
 		/// <summary>
 		/// Converts TodoItem entity to TodoItemViewModel.
 		/// </summary>
-		public static TodoItemViewModel ToViewModel(this TodoItem entity)
+		public static TodoItemResponse ToResponse(this TodoItem entity)
 		{
 			if (entity == null) return null;
 
-			return new TodoItemViewModel
+			return new ()
 			{
 				Id = entity.Id,
 				Title = entity.Title,
@@ -48,84 +50,75 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts TodoItemViewModel to TodoItem entity.
 		/// </summary>
-		public static TodoItem ToEntity(this TodoItemViewModel viewModel)
+		public static TodoItem ToEntity(this TodoItemRequest request)
 		{
-			if (viewModel == null) return null;
+			if (request == null) return null;
 
 			return new TodoItem
 			{
-				Id = viewModel.Id,
-				Title = viewModel.Title,
-				IsCompleted = viewModel.IsCompleted,
-				Priority = viewModel.Priority,
-				Deadline = viewModel.Deadline,
-				Comment = viewModel.Comment,
-				TodoListId = viewModel.TodoListId
+				Id = request.Id,
+				Title = request.Title,
+				IsCompleted = request.IsCompleted,
+				Priority = request.Priority,
+				Deadline = request.Deadline,
+				Comment = request.Comment,
+				TodoListId = request.TodoListId
 			};
 		}
 
 		/// <summary>
 		/// Converts TodoList entity to TodoListViewModel.
 		/// </summary>
-		public static TodoListViewModel ToViewModel(this TodoList entity)
+		public static TodoListResponse ToResponse(this TodoList entity)
 		{
 			if (entity == null) return null;
 
-			return new TodoListViewModel
-			{
-				Id = entity.Id,
-				Name = entity.Name,
-				Items = entity.Items.ToViewModels()
-				.ToList()
-			};
+            return new()
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Items = entity.Items.Select(e => e.ToResponse())
+                .ToList()
+            };
 		}
 
 		/// <summary>
 		/// Converts TodoListViewModel to TodoList entity.
 		/// </summary>
-		public static TodoList ToEntity(this TodoListViewModel viewModel)
+		public static TodoList ToEntity(this TodoListRequest request)
 		{
-			if (viewModel == null) return null;
+			if (request == null) return null;
 
 			return new TodoList
 			{
-				Id = viewModel.Id,
-				Name = viewModel.Name,
-				Items = viewModel.Items.ToEntities().ToList()
+				Id = request.Id,
+				Name = request.Name,
+				Items = request.Items.ToEntities().ToList()
 			};
 		}
 
 		/// <summary>
 		/// Converts a collection of TodoItem entities to a list of TodoItemViewModels.
 		/// </summary>
-		public static IEnumerable<TodoItemViewModel> ToViewModels(this IEnumerable<TodoItem> entities)
-		{
-			if (entities == null)
-				return Enumerable.Empty<TodoItemViewModel>();
-
-			return entities.Select(e => e.ToViewModel());
-		}
-
-		/// <summary>
-		/// Converts a collection of TodoItem entities to a list of TodoItemViewModels.
-		/// </summary>
-		public static TodoItemsViewModel ToViewModel(this IEnumerable<TodoItem> entities)
+		public static TodoItemsResponse ToResponse(this IEnumerable<TodoItem> entities)
 		{
 			if (entities == null)
 				return null;
-			return new()
-			{
-				Items = entities.Select(e => e.ToViewModel())
-			};
+
+            return new()
+            {
+                Items =
+                entities.Select(e => e.ToResponse())
+            };
 		}
 
 		/// <summary>
 		/// Converts a collection of TodoItemViewModels to a list of TodoItem entities.
 		/// </summary>
-		public static IEnumerable<TodoItem> ToEntities(this IEnumerable<TodoItemViewModel> viewModels)
+		public static IEnumerable<TodoItem> ToEntities(this IEnumerable<TodoItemRequest> requests)
 		{
-			if (viewModels == null) return Enumerable.Empty<TodoItem>();
-			return viewModels.Select(vm => vm.ToEntity());
+			if (requests == null) return Enumerable.Empty<TodoItem>();
+			return requests.Select(vm => vm.ToEntity());
 		}
 	}
 }
