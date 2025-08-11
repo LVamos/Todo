@@ -22,7 +22,7 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts a list of TodoListViewModels to a list of TodoList entities.
 		/// </summary>
-		public static List<TodoList> ToEntities(this List<TodoListRequest> request)
+		public static List<TodoList> ToEntities(this List<AddTodoListRequest> request)
 		{
 			if (request == null) return new List<TodoList>();
 			return request.Select(vm => vm.ToEntity()).ToList();
@@ -50,13 +50,12 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts TodoItemViewModel to TodoItem entity.
 		/// </summary>
-		public static TodoItem ToEntity(this TodoItemRequest request)
+		public static TodoItem ToEntity(this AddTodoItemRequest request)
 		{
 			if (request == null) return null;
 
 			return new TodoItem
 			{
-				Id = request.Id,
 				Title = request.Title,
 				IsCompleted = request.IsCompleted,
 				Priority = request.Priority,
@@ -85,15 +84,13 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts TodoListViewModel to TodoList entity.
 		/// </summary>
-		public static TodoList ToEntity(this TodoListRequest request)
+		public static TodoList ToEntity(this AddTodoListRequest request)
 		{
 			if (request == null) return null;
 
 			return new TodoList
 			{
-				Id = request.Id,
 				Name = request.Name,
-				Items = request.Items.ToEntities().ToList()
 			};
 		}
 
@@ -115,7 +112,7 @@ namespace Todo.ViewModels.Mapping
 		/// <summary>
 		/// Converts a collection of TodoItemViewModels to a list of TodoItem entities.
 		/// </summary>
-		public static IEnumerable<TodoItem> ToEntities(this IEnumerable<TodoItemRequest> requests)
+		public static IEnumerable<TodoItem> ToEntities(this IEnumerable<AddTodoItemRequest> requests)
 		{
 			if (requests == null) return Enumerable.Empty<TodoItem>();
 			return requests.Select(vm => vm.ToEntity());

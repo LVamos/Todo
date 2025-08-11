@@ -7,7 +7,7 @@ public interface ITodoItemService
 {
 	Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId);
 	Task<TodoItemResponse?> GetTodoItemByIdAsync(int id);
-	Task AddTodoItemAsync(TodoItemRequest item);
-	Task UpdateTodoItemAsync(TodoItemRequest item);
+	Task AddTodoItemAsync(AddTodoItemRequest item);
+	Task UpdateTodoItemAsync(UpdateTodoItemRequest item);
 	Task DeleteTodoItemAsync(int id);
 }

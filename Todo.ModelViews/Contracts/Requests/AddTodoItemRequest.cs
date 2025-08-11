@@ -3,9 +3,8 @@ using Todo.Entities.Entities;
 
 namespace Todo.Contracts.Contracts.Requests;
 
-public class TodoItemRequest
+public class AddTodoItemRequest
 {
-	public int Id { get; set; }
 	public string Title { get; set; }
 	public bool IsCompleted { get; set; }
 	public Priority Priority { get; set; }

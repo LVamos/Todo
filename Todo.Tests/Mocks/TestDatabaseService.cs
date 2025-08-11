@@ -32,7 +32,7 @@ public class TestDatabaseService : IDatabaseService
         return result ?? throw new InvalidOperationException();
     }
 
-    public async Task AddTodoListAsync(TodoListRequest todoList)
+    public async Task AddTodoListAsync(AddTodoListRequest todoList)
     {
         bool result = TestData.GetData(TestData.AddTodoListResult);
         TestResults.AddTodoList = result;
@@ -40,7 +40,7 @@ public class TestDatabaseService : IDatabaseService
             throw new InvalidOperationException();
     }
 
-    public async Task UpdateTodoListAsync(TodoListRequest list)
+    public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
     {
         bool result = TestData.GetData(TestData.UpdateTodoListResult);
         TestResults.UpdateTodoList = result;
@@ -70,7 +70,7 @@ public class TestDatabaseService : IDatabaseService
         return result ?? throw new ArgumentException(nameof(id));
     }
 
-    public async Task AddTodoItemAsync(TodoItemRequest item)
+    public async Task AddTodoItemAsync(AddTodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.AddTodoItemResult);
         TestResults.AddTodoItem = result;
@@ -78,7 +78,7 @@ public class TestDatabaseService : IDatabaseService
             throw new ArgumentException(nameof(item));
     }
 
-    public async Task UpdateTodoItemAsync(TodoItemRequest item)
+    public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.UpdateTodoItemResult);
         TestResults.UpdateTodoItem = result;

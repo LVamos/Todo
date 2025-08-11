@@ -34,14 +34,14 @@ public class DatabaseService : IDatabaseService
 		return list.ToResponse();
 	}
 
-	public async Task AddTodoListAsync(TodoListRequest todoList)
+	public async Task AddTodoListAsync(AddTodoListRequest todoList)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		context.TodoLists.Add(todoList.ToEntity());
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoListAsync(TodoListRequest list)
+	public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList existing = await context.TodoLists.FindAsync(list.Id);
@@ -77,14 +77,14 @@ public class DatabaseService : IDatabaseService
 		return item.ToResponse();
 	}
 
-	public async Task AddTodoItemAsync(TodoItemRequest todoItem)
+	public async Task AddTodoItemAsync(AddTodoItemRequest todoItem)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		context.TodoItems.Add(todoItem.ToEntity());
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItemRequest item)
+	public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoItem existing = await context.TodoItems.FindAsync(item.Id);

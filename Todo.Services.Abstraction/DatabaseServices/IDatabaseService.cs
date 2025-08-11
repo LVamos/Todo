@@ -9,13 +9,13 @@ namespace Todo.Services.Abstraction.DatabaseServices
 		Task<bool> TodoListExistsAsync(string listName);
 		Task<TodoListsResponse> GetAllTodoListsAsync();
 		Task<TodoListResponse?> GetTodoListByIdAsync(int id);
-		Task AddTodoListAsync(TodoListRequest todoList);
-		Task UpdateTodoListAsync(TodoListRequest list);
+		Task AddTodoListAsync(AddTodoListRequest todoList);
+		Task UpdateTodoListAsync(UpdateTodoListRequest list);
 		Task DeleteTodoListAsync(int id);
 		Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId);
 		Task<TodoItemResponse?> GetTodoItemByIdAsync(int id);
-		Task AddTodoItemAsync(TodoItemRequest item);
-		Task UpdateTodoItemAsync(TodoItemRequest item);
+		Task AddTodoItemAsync(AddTodoItemRequest item);
+		Task UpdateTodoItemAsync(UpdateTodoItemRequest item);
 		Task DeleteTodoItemAsync(int id);
 	}
 }

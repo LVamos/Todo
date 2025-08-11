@@ -33,7 +33,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task AddTodoItemAsync(TodoItemRequest item)
+	public async Task AddTodoItemAsync(AddTodoItemRequest item)
 	{
 		// Validate title
 		if (string.IsNullOrEmpty(item.Title))
@@ -65,7 +65,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task UpdateTodoItemAsync(TodoItemRequest item)
+	public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
 	{
 		// Validate title
 		if (string.IsNullOrEmpty(item.Title))

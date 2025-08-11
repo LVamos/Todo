@@ -48,7 +48,7 @@ namespace Todo.API.Controllers
 
 		[HttpPost("AddTodoItem")]
 		[ProducesResponseType(typeof(ErrorResponse), 200)]
-		public async Task<ErrorResponse> AddTodoItem([FromBody] TodoItemRequest item)
+		public async Task<ErrorResponse> AddTodoItem([FromBody] AddTodoItemRequest item)
 		{
 			try
 			{
@@ -63,7 +63,7 @@ namespace Todo.API.Controllers
 
 		[HttpPut("UpdateTodoItem")]
 		[ProducesResponseType(typeof(ErrorResponse), 200)]
-		public async Task<ErrorResponse> UpdateTodoItem([FromBody] TodoItemRequest item)
+		public async Task<ErrorResponse> UpdateTodoItem([FromBody] UpdateTodoItemRequest item)
 		{
 			try
 			{

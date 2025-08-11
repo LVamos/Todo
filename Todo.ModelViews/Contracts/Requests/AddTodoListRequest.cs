@@ -2,9 +2,7 @@
 
 namespace Todo.Contracts.Contracts.Requests;
 
-public class TodoListRequest
+public class AddTodoListRequest
 {
-	public List<TodoItemRequest> Items { get; set; } = [];
-	public int Id { get; set; }
 	public string Name { get; set; }
 }

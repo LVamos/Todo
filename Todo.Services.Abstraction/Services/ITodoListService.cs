@@ -7,7 +7,7 @@ public interface ITodoListService
 {
 	Task<TodoListsResponse> GetAllTodoListsAsync();
 	Task<TodoListResponse?> GetTodoListByIdAsync(int id);
-	Task AddTodoListAsync(TodoListRequest list);
-	Task UpdateTodoListAsync(TodoListRequest list);
+	Task AddTodoListAsync(AddTodoListRequest list);
+	Task UpdateTodoListAsync(UpdateTodoListRequest list);
 	Task DeleteTodoListAsync(int id);
 }

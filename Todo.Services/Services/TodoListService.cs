@@ -33,7 +33,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task AddTodoListAsync(TodoListRequest list)
+	public async Task AddTodoListAsync(AddTodoListRequest list)
 	{
 		if (string.IsNullOrEmpty(list.Name))
 		{
@@ -50,13 +50,6 @@ public class TodoListService : ITodoListService
 			throw exception;
 		}
 
-		if (list.Items?.Count > 0)
-		{
-			InvalidOperationException exception = new("Cannot create TodoItems before the TodoList is saved.");
-			_loggerService.LogError($"Cannot create TodoItems before the TodoList is saved");
-			throw exception;
-		}
-
 		try
 		{
 			await _databaseService.AddTodoListAsync(list);
@@ -68,7 +61,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task UpdateTodoListAsync(TodoListRequest list)
+	public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
 	{
 		if (string.IsNullOrEmpty(list.Name))
 		{
