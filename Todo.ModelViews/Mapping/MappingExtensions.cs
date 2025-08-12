@@ -1,4 +1,6 @@
-﻿using Todo.Contracts.Contracts.Requests;
+﻿using System.Runtime.CompilerServices;
+
+using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Entities.Entities;
 
@@ -7,10 +9,13 @@ namespace Todo.ViewModels.Mapping
 {
 	public static class MappingExtensions
 	{
-		/// <summary>
-		/// Converts a list of TodoList entities to a list of TodoListViewModels.
-		/// </summary>
-		public static TodoListsResponse ToResponses(this List<TodoList> entities)
+        public static int ToId(this IdRequest request) => request?.Id ?? 0;
+        public static IdRequest ToContract(this int id) => new() { Id = id};
+
+        /// <summary>
+        /// Converts a list of TodoList entities to a list of TodoListViewModels.
+        /// </summary>
+        public static TodoListsResponse ToResponses(this List<TodoList> entities)
 		{
 			if (entities == null) return null;
 			return new TodoListsResponse()

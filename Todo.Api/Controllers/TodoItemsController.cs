@@ -24,7 +24,8 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				return await _todoItemService.GetTodoItemsByListIdAsync(listId);
+                IdRequest request = new() { Id = listId };
+				return await _todoItemService.GetTodoItemsByListIdAsync(request);
 			}
 			catch (Exception e)
 			{
@@ -38,7 +39,8 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				return await _todoItemService.GetTodoItemByIdAsync(id);
+                IdRequest request = new() { Id = id };
+				return await _todoItemService.GetTodoItemByIdAsync(request);
 			}
 			catch (Exception e)
 			{
@@ -82,7 +84,8 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				await _todoItemService.DeleteTodoItemAsync(id);
+                IdRequest request = new() { Id = id };
+				await _todoItemService.DeleteTodoItemAsync(request);
 				return new();
 			}
 			catch (Exception e)

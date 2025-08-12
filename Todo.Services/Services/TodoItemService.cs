@@ -1,17 +1,20 @@
-﻿using Todo.Contracts.Contracts.Requests;
+﻿using FluentValidation;
+
+using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
+using Todo.ViewModels.Mapping;
 
 
 namespace Todo.Services.Services;
 public class TodoItemService : ITodoItemService
 {
-	public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId)
+	public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
 	{
 		try
 		{
-			return await _databaseService.GetTodoItemsByListIdAsync(listId);
+            return await _databaseService.GetTodoItemsByListIdAsync(listId);
 		}
 		catch (Exception e)
 		{
@@ -20,7 +23,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task<TodoItemResponse?> GetTodoItemByIdAsync(int id)
+	public async Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
 	{
 		try
 		{
@@ -46,7 +49,7 @@ public class TodoItemService : ITodoItemService
 		// validate TodoList link
 		try
 		{
-			TodoListResponse parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId);
+			TodoListResponse parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId.ToContract());
 		}
 		catch (Exception)
 		{
@@ -86,7 +89,7 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-	public async Task DeleteTodoItemAsync(int id)
+	public async Task DeleteTodoItemAsync(IdRequest id)
 	{
 		try
 		{
@@ -99,13 +102,14 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-
-	private ILoggerService _loggerService;
+    private IValidator<IdRequest> _idRequestValidator;
+    private ILoggerService _loggerService;
 	private IDatabaseService _databaseService;
 	private ITodoListService _todoListService;
 
-	public TodoItemService(ILoggerService loggerService, IDatabaseService databaseService, ITodoListService todoListService)
+	public TodoItemService(IValidator<IdRequest> idRequestValidator, ILoggerService loggerService, IDatabaseService databaseService, ITodoListService todoListService)
 	{
+        _idRequestValidator = idRequestValidator;
 		_loggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
 		_databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
 		_todoListService = todoListService;

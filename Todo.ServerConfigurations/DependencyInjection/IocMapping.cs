@@ -1,15 +1,20 @@
 ﻿using Autofac;
 
+using FluentValidation;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Configuration;
 
 using Todo.Constants.Settings;
+using Todo.Contracts.Contracts.Requests;
 using Todo.Dal.Abstraction;
 using Todo.Dal.Context;
 using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
 using Todo.Services.DatabaseServices;
 using Todo.Services.Services;
+using Todo.Services.Validation;
 
 namespace Todo.ServerConfigurations.DependencyInjection;
 
@@ -82,7 +87,12 @@ public class IocMapping
 	/// <param name="builder">A container builder</param>
 	protected virtual void RegisterBusinessServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<LoggerService>().As<ILoggerService>();
+        builder.RegisterAssemblyTypes(typeof(IdRequestValidator).Assembly)
+            .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+            .AsImplementedInterfaces()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<LoggerService>().As<ILoggerService>();
 		builder.RegisterType<TodoListService>().As<ITodoListService>();
 		builder.RegisterType<TodoItemService>().As<ITodoItemService>();
 	}

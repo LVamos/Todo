@@ -25,7 +25,7 @@ public class TestDatabaseService : IDatabaseService
         return result;
     }
 
-    public async Task<TodoListResponse?> GetTodoListByIdAsync(int id)
+    public async Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
     {
         TodoListResponse result = TestData.GetData(TestData.GetTodoListByIdResult);
         TestResults.GetTodoListById = result;
@@ -48,7 +48,7 @@ public class TestDatabaseService : IDatabaseService
             throw new InvalidOperationException();
     }
 
-    public async Task DeleteTodoListAsync(int id)
+    public async Task DeleteTodoListAsync(IdRequest id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoListResult);
         TestResults.DeleteTodoList = result;
@@ -56,14 +56,14 @@ public class TestDatabaseService : IDatabaseService
             throw new InvalidOperationException();
     }
 
-    public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId)
+    public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
     {
         TodoItemsResponse result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
         TestResults.GetTodoItemsByListId = result;
         return result ?? throw new ArgumentException(nameof(listId));
     }
 
-    public async Task<TodoItemResponse?> GetTodoItemByIdAsync(int id)
+    public async Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
     {
         TodoItemResponse result = TestData.GetData(TestData.GetTodoItemByIdResult);
         TestResults.GetTodoItemById = result;
@@ -86,7 +86,7 @@ public class TestDatabaseService : IDatabaseService
             throw new ArgumentException(nameof(item));
     }
 
-    public async Task DeleteTodoItemAsync(int id)
+    public async Task DeleteTodoItemAsync(IdRequest id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoItemResult);
         TestResults.DeleteTodoItem = result;

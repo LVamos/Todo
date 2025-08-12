@@ -65,14 +65,4 @@ public class TestIocMapping : IocMapping
 	{
 	}
 
-	/// <summary>
-	///     Registers services related to business logic.
-	/// </summary>
-	/// <param name="builder">A container builder</param>
-	protected override void RegisterBusinessServices(ContainerBuilder builder)
-	{
-		builder.RegisterType<LoggerService>().As<ILoggerService>();
-		builder.RegisterType<TodoListService>().As<ITodoListService>();
-		builder.RegisterType<TodoItemService>().As<ITodoItemService>();
-	}
 }

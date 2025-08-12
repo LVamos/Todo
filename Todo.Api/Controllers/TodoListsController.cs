@@ -3,6 +3,7 @@
 using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.Services;
+using Todo.ViewModels.Mapping;
 
 namespace Todo.API.Controllers
 {
@@ -38,7 +39,7 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				return await _todoListService.GetTodoListByIdAsync(id);
+                return await _todoListService.GetTodoListByIdAsync(id.ToContract());
 			}
 			catch (Exception e)
 			{
@@ -82,7 +83,8 @@ namespace Todo.API.Controllers
 		{
 			try
 			{
-				await _todoListService.DeleteTodoListAsync(id);
+                IdRequest request = new() { Id = id };
+				await _todoListService.DeleteTodoListAsync(request);
 				return new();
 			}
 			catch (Exception e)

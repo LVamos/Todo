@@ -20,7 +20,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task<TodoListResponse?> GetTodoListByIdAsync(int id)
+	public async Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
 	{
 		try
 		{
@@ -81,7 +81,7 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	public async Task DeleteTodoListAsync(int id)
+	public async Task DeleteTodoListAsync(IdRequest id)
 	{
 		try
 		{

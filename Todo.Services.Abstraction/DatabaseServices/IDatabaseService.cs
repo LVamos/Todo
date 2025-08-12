@@ -8,14 +8,14 @@ namespace Todo.Services.Abstraction.DatabaseServices
 	{
 		Task<bool> TodoListExistsAsync(string listName);
 		Task<TodoListsResponse> GetAllTodoListsAsync();
-		Task<TodoListResponse?> GetTodoListByIdAsync(int id);
+		Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id);
 		Task AddTodoListAsync(AddTodoListRequest todoList);
 		Task UpdateTodoListAsync(UpdateTodoListRequest list);
-		Task DeleteTodoListAsync(int id);
-		Task<TodoItemsResponse> GetTodoItemsByListIdAsync(int listId);
-		Task<TodoItemResponse?> GetTodoItemByIdAsync(int id);
+		Task DeleteTodoListAsync(IdRequest id);
+		Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId);
+		Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id);
 		Task AddTodoItemAsync(AddTodoItemRequest item);
 		Task UpdateTodoItemAsync(UpdateTodoItemRequest item);
-		Task DeleteTodoItemAsync(int id);
+		Task DeleteTodoItemAsync(IdRequest id);
 	}
 }
