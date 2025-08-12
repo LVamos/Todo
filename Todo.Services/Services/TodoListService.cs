@@ -24,7 +24,9 @@ public class TodoListService : ITodoListService
 	{
 		try
 		{
-			return await _databaseService.GetTodoListByIdAsync(id);
+            await _validationService.ValidateAndThrowAsync(id);
+         
+            return await _databaseService.GetTodoListByIdAsync(id);
 		}
 		catch (Exception e)
 		{
@@ -35,13 +37,6 @@ public class TodoListService : ITodoListService
 
 	public async Task AddTodoListAsync(AddTodoListRequest list)
 	{
-		if (string.IsNullOrEmpty(list.Name))
-		{
-			ArgumentNullException exception = new(nameof(list.Name));
-			_loggerService.LogError("TodoList must have a name");
-			throw exception;
-		}
-
 		if (await _databaseService.TodoListExistsAsync(list.Name))
 		{
 			string message = $"TodoList named {list.Name} already exists";
@@ -52,7 +47,8 @@ public class TodoListService : ITodoListService
 
 		try
 		{
-			await _databaseService.AddTodoListAsync(list);
+            await _validationService.ValidateAndThrowAsync(list);
+            await _databaseService.AddTodoListAsync(list);
 		}
 		catch (Exception e)
 		{
@@ -63,16 +59,10 @@ public class TodoListService : ITodoListService
 
 	public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
 	{
-		if (string.IsNullOrEmpty(list.Name))
-		{
-			ArgumentNullException exception = new(nameof(list.Name));
-			_loggerService.LogError("TodoList must have a name");
-			throw exception;
-		}
-
 		try
 		{
-			await _databaseService.UpdateTodoListAsync(list);
+            await _validationService.ValidateAndThrowAsync(list);
+            await _databaseService.UpdateTodoListAsync(list);
 		}
 		catch (Exception e)
 		{
@@ -85,7 +75,8 @@ public class TodoListService : ITodoListService
 	{
 		try
 		{
-			await _databaseService.DeleteTodoListAsync(id);
+            await _validationService.ValidateAndThrowAsync(id);
+            await _databaseService.DeleteTodoListAsync(id);
 		}
 		catch (Exception e)
 		{
@@ -94,12 +85,14 @@ public class TodoListService : ITodoListService
 		}
 	}
 
-	private IDatabaseService _databaseService;
+    private IValidationService _validationService;
+    private IDatabaseService _databaseService;
 	private ILoggerService _loggerService;
 
-	public TodoListService(IDatabaseService databaseService, ILoggerService loggerService)
+	public TodoListService(IValidationService validationService, IDatabaseService databaseService, ILoggerService loggerService)
 	{
-		_databaseService = databaseService;
+        _validationService = validationService;
+        _databaseService = databaseService;
 		_loggerService = loggerService;
 	}
 }

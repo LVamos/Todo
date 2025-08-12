@@ -4,6 +4,7 @@ using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
+using Todo.Services.Validation;
 using Todo.ViewModels.Mapping;
 
 
@@ -14,6 +15,7 @@ public class TodoItemService : ITodoItemService
 	{
 		try
 		{
+            await _validationService.ValidateAndThrowAsync(listId);
             return await _databaseService.GetTodoItemsByListIdAsync(listId);
 		}
 		catch (Exception e)
@@ -27,6 +29,7 @@ public class TodoItemService : ITodoItemService
 	{
 		try
 		{
+            await _validationService.ValidateAndThrowAsync(id);
 			return await _databaseService.GetTodoItemByIdAsync(id);
 		}
 		catch (Exception e)
@@ -38,18 +41,11 @@ public class TodoItemService : ITodoItemService
 
 	public async Task AddTodoItemAsync(AddTodoItemRequest item)
 	{
-		// Validate title
-		if (string.IsNullOrEmpty(item.Title))
-		{
-			ArgumentNullException exception = new(nameof(item.Title));
-			_loggerService.LogError($"TodoItem must have a title", exception);
-			throw exception;
-		}
-
-		// validate TodoList link
+		// validations
 		try
 		{
-			TodoListResponse parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId.ToContract());
+            await _validationService.ValidateAndThrowAsync(item);
+            TodoListResponse parentList = await _todoListService.GetTodoListByIdAsync(item.TodoListId.ToContract());
 		}
 		catch (Exception)
 		{
@@ -70,17 +66,10 @@ public class TodoItemService : ITodoItemService
 
 	public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
 	{
-		// Validate title
-		if (string.IsNullOrEmpty(item.Title))
-		{
-			ArgumentNullException exception = new(nameof(item.Title));
-			_loggerService.LogError($"TodoItem must have a title", exception);
-			throw exception;
-		}
-
 		try
 		{
-			await _databaseService.UpdateTodoItemAsync(item);
+            await _validationService.ValidateAndThrowAsync(item);
+            await _databaseService.UpdateTodoItemAsync(item);
 		}
 		catch (Exception e)
 		{
@@ -93,7 +82,8 @@ public class TodoItemService : ITodoItemService
 	{
 		try
 		{
-			await _databaseService.DeleteTodoItemAsync(id);
+            await _validationService.ValidateAndThrowAsync(id);
+            await _databaseService.DeleteTodoItemAsync(id);
 		}
 		catch (Exception e)
 		{
@@ -102,15 +92,15 @@ public class TodoItemService : ITodoItemService
 		}
 	}
 
-    private IValidator<IdRequest> _idRequestValidator;
+    private IValidationService _validationService;
     private ILoggerService _loggerService;
 	private IDatabaseService _databaseService;
 	private ITodoListService _todoListService;
 
-	public TodoItemService(IValidator<IdRequest> idRequestValidator, ILoggerService loggerService, IDatabaseService databaseService, ITodoListService todoListService)
+	public TodoItemService(IValidationService validationService, ILoggerService loggerService, IDatabaseService databaseService, ITodoListService todoListService)
 	{
-        _idRequestValidator = idRequestValidator;
-		_loggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
+        _validationService = validationService;
+        _loggerService = loggerService ?? throw new ArgumentNullException(nameof(loggerService));
 		_databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
 		_todoListService = todoListService;
 	}

@@ -91,7 +91,9 @@ public class IocMapping
             .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
-
+        builder.RegisterType<ValidationService>()
+       .As<IValidationService>()
+       .SingleInstance();
         builder.RegisterType<LoggerService>().As<ILoggerService>();
 		builder.RegisterType<TodoListService>().As<ITodoListService>();
 		builder.RegisterType<TodoItemService>().As<ITodoItemService>();

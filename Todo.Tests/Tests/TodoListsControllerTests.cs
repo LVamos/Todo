@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
+using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Tests.Mocks;
 
@@ -22,7 +23,8 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestValid()
     {
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Valid, 1);
+        IdRequest id = new() { Id = 1 }; 
+        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Valid, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Name, Is.EqualTo("Pracovní úkoly"));
         Assert.That(result.Id, Is.EqualTo(1));
@@ -31,7 +33,8 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestLimit()
     {
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Limit, int.MaxValue);
+        IdRequest id = new() { Id =int.MaxValue};
+        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Limit, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Name, Is.EqualTo("Maximální ID seznam"));
         Assert.That(result.Id, Is.EqualTo(int.MaxValue));
@@ -40,14 +43,15 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestInvalid()
     {
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Invalid, -1);
+        IdRequest id = new() { Id =-1};
+        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Invalid, id);
         Assert.That(result, Is.Null);
     }
 
     [Test]
     public async Task UpdateTodoListTestValid()
     {
-        TodoListResponse list = new()
+        UpdateTodoListRequest list = new()
         {
             Id = 1,
             Name = "Updated List"
@@ -59,7 +63,7 @@ public class TodoListsControllerTests
     [Test]
     public async Task UpdateTodoListTestLimit()
     {
-        TodoListResponse list = new()
+        UpdateTodoListRequest list = new()
         {
             Id = int.MaxValue,
             Name = "Limit List"
@@ -71,7 +75,7 @@ public class TodoListsControllerTests
     [Test]
     public async Task UpdateTodoListTestInvalid()
     {
-        TodoListResponse list = new();
+        UpdateTodoListRequest list = new();
         bool result = await UpdateTodoListAsync(ResultType.Invalid, list);
         Assert.That(result, Is.False);
     }
@@ -79,44 +83,51 @@ public class TodoListsControllerTests
     [Test]
     public async Task DeleteTodoListTestValid()
     {
-        bool result = await DeleteTodoListAsync(ResultType.Valid, 1);
+        IdRequest id = new() { Id =1};
+        bool result = await DeleteTodoListAsync(ResultType.Valid, id);
         Assert.That(result, Is.True);
     }
 
     [Test]
     public async Task DeleteTodoListTestLimit()
     {
-        bool result = await DeleteTodoListAsync(ResultType.Limit, int.MaxValue);
+        IdRequest id = new() { Id = int.MaxValue };
+        bool result = await DeleteTodoListAsync(ResultType.Limit, id);
         Assert.That(result, Is.True);
     }
 
     [Test]
     public async Task DeleteTodoListTestInvalid()
     {
-        bool result = await DeleteTodoListAsync(ResultType.Invalid, -1);
+        IdRequest id = new() { Id = -1 };
+        bool result = await DeleteTodoListAsync(ResultType.Invalid, id);
         Assert.That(result, Is.False);
     }
 
-    private static async Task<TodoListResponse> GetTodoListByIdAsync(ResultType scenario, int id)
+    private async Task<TodoListResponse> GetTodoListByIdAsync(ResultType scenario, IdRequest id)
     {
+        TestResults.GetTodoListById = null;
+        TestResults.GetTodoListById = null;
         TestData.CurrentScenario = scenario;
-        String uri = $"api/TodoLists/GetTodoListById/{id}";
+        String uri = $"api/TodoLists/GetTodoListById/{id.Id}";
         await TestPlatform.Client.GetAsync(uri);
         return TestResults.GetTodoListById;
     }
 
-    private static async Task<bool> UpdateTodoListAsync(ResultType scenario, TodoListResponse list)
+    private async Task<bool> UpdateTodoListAsync(ResultType scenario, UpdateTodoListRequest list)
     {
+        TestResults.UpdateTodoList = false;
         TestData.CurrentScenario = scenario;
         String uri = "api/TodoLists/UpdateTodoList";
         await TestPlatform.PutAsync(list, uri);
         return TestResults.UpdateTodoList;
     }
 
-    private static async Task<bool> DeleteTodoListAsync(ResultType scenario, int id)
+    private async Task<bool> DeleteTodoListAsync(ResultType scenario, IdRequest id)
     {
+        TestResults.DeleteTodoList = false;
         TestData.CurrentScenario = scenario;
-        String uri = $"api/TodoLists/DeleteTodoList/{id}";
+        String uri = $"api/TodoLists/DeleteTodoList/{id.Id}";
         await TestPlatform.Client.GetAsync(uri);
         return TestResults.DeleteTodoList;
     }
@@ -124,7 +135,7 @@ public class TodoListsControllerTests
     [Test]
     public async Task AddTodoListTestLimit()
     {
-        TodoListResponse list = new()
+        AddTodoListRequest list = new()
         {
             Name = "slepice"
         };
@@ -135,7 +146,7 @@ public class TodoListsControllerTests
     [Test]
     public async Task AddTodoListTestInvalid()
     {
-        TodoListResponse list = new();
+        AddTodoListRequest list = new();
         bool result = await AddTodoListAsync(ResultType.Invalid, list);
         Assert.That(result, Is.False);
     }
@@ -143,7 +154,7 @@ public class TodoListsControllerTests
     [Test]
     public async Task AddTodoListTestValid()
     {
-        TodoListResponse list = new()
+        AddTodoListRequest list = new()
         {
             Name = "slepice"
         };
@@ -165,15 +176,16 @@ public class TodoListsControllerTests
 
     private static async Task<TodoListsResponse> GetAllTodoListsAsync(ResultType scenario)
     {
+        TestResults.GetAllTodoLists = null;
         TestData.CurrentScenario = scenario;
         String uri = "api/TodoLists/GetAllTodoLists";
         await TestPlatform.Client.GetAsync(uri);
-        TodoListsResponse result = TestResults.GetAllTodoLists;
-        return result;
+        return TestResults.GetAllTodoLists;
     }
 
-    private static async Task<bool> AddTodoListAsync(ResultType scenario, TodoListResponse list)
+    private static async Task<bool> AddTodoListAsync(ResultType scenario, AddTodoListRequest list)
     {
+        TestResults.AddTodoList = false;
         TestData.CurrentScenario = scenario;
         String uri = "api/TodoLists/AddTodoList";
         await TestPlatform.PostAsync(list, uri);
