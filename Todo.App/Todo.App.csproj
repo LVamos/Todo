@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	  <Nullable>warnings</Nullable>
 	  <NoWarn>CS8714;CS8621;CS8632;CS8618;NU1803</NoWarn>
+	  <UserSecretsId>e6dce13f-6a7f-4d94-849b-2bfcd170d635</UserSecretsId>
+	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 
   </PropertyGroup>
 
@@ -19,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0-preview.1.25080.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-preview.1.25080.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.1.25080.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>

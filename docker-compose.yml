@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: todo-sql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/1433'"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  todo.app:
+    container_name: todo-app
+    build:
+      context: .
+      dockerfile: Todo.App/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TodoDb;User Id=sa;Password=Your_password123!;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=True
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+volumes:
+  mssqldata:
