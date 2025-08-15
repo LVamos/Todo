@@ -1,136 +1,140 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.Services;
-using Todo.ViewModels.Mapping;
 
 namespace Todo.API.Controllers
 {
-	/// <summary>
-	/// API endpoints for working with to-do lists.
-	/// </summary>
-	/// <remarks>
-	/// Provides CRUD operations for to-do lists. Every response may contain an error message in the <c>Error</c> field.
-	/// </remarks>
-	[ApiController]
-	[Route("api/[controller]")]
-	public class TodoListsController : ControllerBase
-	{
-		private readonly ITodoListService _todoListService;
+    /// <summary>
+    /// API endpoints for working with to-do lists.
+    /// </summary>
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TodoListsController : ControllerBase
+    {
+        private readonly ITodoListService _todoListService;
 
-		/// <summary>
-		/// Creates a new instance of the to-do lists controller.
-		/// </summary>
-		/// <param name="todoListService">Application service for working with lists.</param>
-		public TodoListsController(ITodoListService todoListService)
-		{
-			_todoListService = todoListService;
-		}
+        public TodoListsController(ITodoListService todoListService)
+        {
+            _todoListService = todoListService;
+        }
 
-		/// <summary>
-		/// Retrieves all available to-do lists.
-		/// </summary>
-		/// <returns>A collection of lists or error information.</returns>
-		/// <response code="200">Returns all available lists.</response>
-    
-        		[HttpGet("GetAllTodoLists")]
-		[ProducesResponseType(typeof(TodoListsResponse), 200)]
-		public async Task<TodoListsResponse> GetAllTodoLists()
-		{
-			try
-			{
-				TodoListsResponse result = await _todoListService.GetAllTodoListsAsync();
-				return result;
-			}
-			catch (Exception e)
-			{
-				return new() { Error = e.ToString() };
-			}
-		}
+        /// <summary>Gets a to-do list by ID.</summary>
+        [HttpGet("GetTodoListById/{id}")]
+        [ProducesResponseType(typeof(TodoListResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<TodoListResponse>> GetTodoListById(int id)
+        {
+            try
+            {
+                var req = new IdRequest { Id = id };
+                var result = await _todoListService.GetTodoListByIdAsync(req);
+                if (result == null)
+                    return NotFound();
+                return Ok(result);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return ServerError(ex);
+            }
+        }
 
-		/// <summary>
-		/// Retrieves a specific to-do list by its ID.
-		/// </summary>
-		/// <param name="id">Identifier of the list.</param>
-		/// <returns>List details or error information.</returns>
-		/// <response code="200">Returns the list details.</response>
-		[HttpGet("GetTodoListById/{id}")]
-		[ProducesResponseType(typeof(TodoListResponse), 200)]
-		public async Task<TodoListResponse> GetTodoListById(int id)
-		{
-			try
-			{
-                return await _todoListService.GetTodoListByIdAsync(id.ToContract());
-			}
-			catch (Exception e)
-			{
-				return new() { Error = e.ToString() };
-			}
-		}
+        /// <summary>Gets all to-do lists.</summary>
+        [HttpGet("GetAllTodoLists")]
+        [ProducesResponseType(typeof(TodoListsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<TodoListsResponse>> GetAllTodoLists()
+        {
+            try
+            {
+                var result = await _todoListService.GetAllTodoListsAsync();
+                if (result == null)
+                    return NotFound();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return ServerError(ex);
+            }
+        }
 
-		/// <summary>
-		/// Creates a new to-do list.
-		/// </summary>
-		/// <param name="todoList">Data of the new list.</param>
-		/// <returns>Empty object on success or error information.</returns>
-		/// <response code="201">The list was successfully created.</response>
-		[HttpPost("AddTodoList")]
-		[ProducesResponseType(typeof(ErrorResponse), 201)]
-		public async Task<ErrorResponse> AddTodoList([FromBody] AddTodoListRequest todoList)
-		{
-			try
-			{
-				await _todoListService.AddTodoListAsync(todoList);
-				return new();
-			}
-		catch (Exception e)
-			{
-				return new() { Error = e.ToString() };
-			}
-		}
+        /// <summary>Adds a new to-do list.</summary>
+        [HttpPost("AddTodoList")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> AddTodoList([FromBody] AddTodoListRequest list)
+        {
+            try
+            {
+                await _todoListService.AddTodoListAsync(list);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ServerError(ex);
+            }
+        }
 
-		/// <summary>
-		/// Updates an existing to-do list.
-		/// </summary>
-		/// <param name="todoList">Updated list data.</param>
-		/// <returns>Empty object on success or error information.</returns>
-		/// <response code="200">The list was successfully updated.</response>
-		[HttpPut("UpdateTodoList")]
-		[ProducesResponseType(typeof(ErrorResponse), 200)]
-		public async Task<ErrorResponse> UpdateTodoList([FromBody] UpdateTodoListRequest todoList)
-		{
-			try
-			{
-				await _todoListService.UpdateTodoListAsync(todoList);
-				return new();
-			}
-			catch (Exception e)
-			{
-				return new() { Error = e.ToString() };
-			}
-		}
+        /// <summary>Updates an existing to-do list.</summary>
+        [HttpPut("UpdateTodoList")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateTodoList([FromBody] UpdateTodoListRequest list)
+        {
+            try
+            {
+                await _todoListService.UpdateTodoListAsync(list);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ServerError(ex);
+            }
+        }
 
-		/// <summary>
-		/// Deletes a to-do list by its ID.
-		/// </summary>
-		/// <param name="id">Identifier of the list to delete.</param>
-		/// <returns>Empty object on success or error information.</returns>
-		/// <response code="200">The list was successfully deleted.</response>
-		[HttpGet("DeleteTodoList/{id}")]
-		[ProducesResponseType(typeof(ErrorResponse), 200)]
-		public async Task<ErrorResponse> DeleteTodoList(int id)
-		{
-			try
-			{
-                IdRequest request = new() { Id = id };
-				await _todoListService.DeleteTodoListAsync(request);
-				return new();
-			}
-			catch (Exception e)
-			{
-				return new() { Error = e.ToString() };
-			}
-		}
-	}
+        /// <summary>Deletes a to-do list by ID.</summary>
+        /// <remarks>Route kept as GET for test compatibility.</remarks>
+        [HttpGet("DeleteTodoList/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteTodoList(int id)
+        {
+            try
+            {
+                var req = new IdRequest { Id = id };
+                await _todoListService.DeleteTodoListAsync(req);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ServerError(ex);
+            }
+        }
+
+        private ActionResult ServerError(Exception ex) =>
+            StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Error = ex.Message });
+    }
 }
