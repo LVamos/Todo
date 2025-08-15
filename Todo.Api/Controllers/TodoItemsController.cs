@@ -29,22 +29,11 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TodoItemsResponse>> GetTodoItemsByListId(int listId)
         {
-            try
-            {
-                var request = new IdRequest { Id = listId };
-                var result = await _todoItemService.GetTodoItemsByListIdAsync(request);
-                if (result == null)
-                    return NotFound();
-                return Ok(result);
-            }
-            catch (ArgumentException)
-            {
+            var request = new IdRequest { Id = listId };
+            var result = await _todoItemService.GetTodoItemsByListIdAsync(request);
+            if (result == null)
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            return Ok(result);
         }
 
         /// <summary>Gets a to-do item by ID.</summary>
@@ -54,22 +43,11 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TodoItemResponse>> GetTodoItemById(int id)
         {
-            try
-            {
-                var request = new IdRequest { Id = id };
-                var result = await _todoItemService.GetTodoItemByIdAsync(request);
-                if (result == null)
-                    return NotFound();
-                return Ok(result);
-            }
-            catch (ArgumentException)
-            {
+            var request = new IdRequest { Id = id };
+            var result = await _todoItemService.GetTodoItemByIdAsync(request);
+            if (result == null)
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            return Ok(result);
         }
 
         /// <summary>Adds a new to-do item.</summary>
@@ -79,19 +57,8 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddTodoItem([FromBody] AddTodoItemRequest item)
         {
-            try
-            {
-                await _todoItemService.AddTodoItemAsync(item);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            await _todoItemService.AddTodoItemAsync(item);
+            return Ok();
         }
 
         /// <summary>Updates an existing to-do item.</summary>
@@ -101,19 +68,8 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateTodoItem([FromBody] UpdateTodoItemRequest item)
         {
-            try
-            {
-                await _todoItemService.UpdateTodoItemAsync(item);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            await _todoItemService.UpdateTodoItemAsync(item);
+            return Ok();
         }
 
         /// <summary>Deletes a to-do item by ID.</summary>
@@ -124,23 +80,9 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteTodoItem(int id)
         {
-            try
-            {
-                var request = new IdRequest { Id = id };
-                await _todoItemService.DeleteTodoItemAsync(request);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            var request = new IdRequest { Id = id };
+            await _todoItemService.DeleteTodoItemAsync(request);
+            return Ok();
         }
-
-        private ActionResult ServerError(Exception ex) =>
-            StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Error = ex.Message });
     }
 }

@@ -28,22 +28,11 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TodoListResponse>> GetTodoListById(int id)
         {
-            try
-            {
-                var req = new IdRequest { Id = id };
-                var result = await _todoListService.GetTodoListByIdAsync(req);
-                if (result == null)
-                    return NotFound();
-                return Ok(result);
-            }
-            catch (InvalidOperationException)
-            {
+            var req = new IdRequest { Id = id };
+            var result = await _todoListService.GetTodoListByIdAsync(req);
+            if (result == null)
                 return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            return Ok(result);
         }
 
         /// <summary>Gets all to-do lists.</summary>
@@ -53,17 +42,10 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TodoListsResponse>> GetAllTodoLists()
         {
-            try
-            {
-                var result = await _todoListService.GetAllTodoListsAsync();
-                if (result == null)
-                    return NotFound();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            var result = await _todoListService.GetAllTodoListsAsync();
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
 
         /// <summary>Adds a new to-do list.</summary>
@@ -73,19 +55,8 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddTodoList([FromBody] AddTodoListRequest list)
         {
-            try
-            {
-                await _todoListService.AddTodoListAsync(list);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            await _todoListService.AddTodoListAsync(list);
+            return Ok();
         }
 
         /// <summary>Updates an existing to-do list.</summary>
@@ -95,19 +66,8 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateTodoList([FromBody] UpdateTodoListRequest list)
         {
-            try
-            {
-                await _todoListService.UpdateTodoListAsync(list);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            await _todoListService.UpdateTodoListAsync(list);
+            return Ok();
         }
 
         /// <summary>Deletes a to-do list by ID.</summary>
@@ -118,23 +78,9 @@ namespace Todo.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteTodoList(int id)
         {
-            try
-            {
-                var req = new IdRequest { Id = id };
-                await _todoListService.DeleteTodoListAsync(req);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return ServerError(ex);
-            }
+            var req = new IdRequest { Id = id };
+            await _todoListService.DeleteTodoListAsync(req);
+            return Ok();
         }
-
-        private ActionResult ServerError(Exception ex) =>
-            StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Error = ex.Message });
     }
 }
