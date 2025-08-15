@@ -3,96 +3,45 @@ using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.DatabaseServices;
 using Todo.Services.Abstraction.Services;
 
-
 namespace Todo.Services.Services;
 public class TodoListService : ITodoListService
 {
-	public async Task<TodoListsResponse> GetAllTodoListsAsync()
-	{
-		try
-		{
-			return await _databaseService.GetAllTodoListsAsync();
-		}
-		catch (Exception e)
-		{
-			_loggerService.LogError($"Error during optaining all TodoLists", e);
-			throw;
-		}
-	}
+	public async Task<TodoListsResponse> GetAllTodoListsAsync() => await _databaseService.GetAllTodoListsAsync();
 
 	public async Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
 	{
-		try
-		{
-            await _validationService.ValidateAndThrowAsync(id);
-         
-            return await _databaseService.GetTodoListByIdAsync(id);
-		}
-		catch (Exception e)
-		{
-			_loggerService.LogError($"Error during finding TodoList {id}", e);
-			throw;
-		}
+        await _validationService.ValidateAndThrowAsync(id);
+        return await _databaseService.GetTodoListByIdAsync(id);
 	}
 
 	public async Task AddTodoListAsync(AddTodoListRequest list)
 	{
 		if (await _databaseService.TodoListExistsAsync(list.Name))
-		{
-			string message = $"TodoList named {list.Name} already exists";
-			InvalidOperationException exception = new(message);
-			_loggerService.LogError(message, exception);
-			throw exception;
-		}
+			throw new InvalidOperationException($"TodoList named {list.Name} already exists");
 
-		try
-		{
-            await _validationService.ValidateAndThrowAsync(list);
-            await _databaseService.AddTodoListAsync(list);
-		}
-		catch (Exception e)
-		{
-			_loggerService.LogError($"Unable to add new TodoList", e);
-			throw;
-		}
+        await _validationService.ValidateAndThrowAsync(list);
+        await _databaseService.AddTodoListAsync(list);
 	}
 
 	public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
 	{
-		try
-		{
-            await _validationService.ValidateAndThrowAsync(list);
-            await _databaseService.UpdateTodoListAsync(list);
-		}
-		catch (Exception e)
-		{
-			_loggerService.LogError($"Error during updating Todolist {list.Id}", e);
-			throw;
-		}
+        await _validationService.ValidateAndThrowAsync(list);
+        await _databaseService.UpdateTodoListAsync(list);
 	}
 
 	public async Task DeleteTodoListAsync(IdRequest id)
 	{
-		try
-		{
-            await _validationService.ValidateAndThrowAsync(id);
-            await _databaseService.DeleteTodoListAsync(id);
-		}
-		catch (Exception e)
-		{
-			_loggerService.LogError($"Error during deletion of TodoList {id}", e);
-			throw;
-		}
+        await _validationService.ValidateAndThrowAsync(id);
+        await _databaseService.DeleteTodoListAsync(id);
 	}
 
-    private IValidationService _validationService;
-    private IDatabaseService _databaseService;
-	private ILoggerService _loggerService;
+    private readonly IValidationService _validationService;
+    private readonly IDatabaseService _databaseService;
 
 	public TodoListService(IValidationService validationService, IDatabaseService databaseService, ILoggerService loggerService)
 	{
         _validationService = validationService;
         _databaseService = databaseService;
-		_loggerService = loggerService;
+        // loggerService intentionally unused: logging moved to global ExceptionHandlingMiddleware
 	}
 }
