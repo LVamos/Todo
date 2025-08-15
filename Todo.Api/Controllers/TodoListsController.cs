@@ -26,10 +26,9 @@ namespace Todo.API.Controllers
         [ProducesResponseType(typeof(TodoListResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TodoListResponse>> GetTodoListById(int id)
+        public async Task<ActionResult<TodoListResponse>> GetTodoListById([FromRoute] IdRequest request)
         {
-            var req = new IdRequest { Id = id };
-            var result = await _todoListService.GetTodoListByIdAsync(req);
+            TodoListResponse result = await _todoListService.GetTodoListByIdAsync(request);
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -72,14 +71,13 @@ namespace Todo.API.Controllers
 
         /// <summary>Deletes a to-do list by ID.</summary>
         /// <remarks>Route kept as GET for test compatibility.</remarks>
-        [HttpGet("DeleteTodoList/{id}")]
+        [HttpDelete("DeleteTodoList/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteTodoList(int id)
+        public async Task<ActionResult> DeleteTodoList([FromRoute] IdRequest request)
         {
-            var req = new IdRequest { Id = id };
-            await _todoListService.DeleteTodoListAsync(req);
+            await _todoListService.DeleteTodoListAsync(request);
             return Ok();
         }
     }

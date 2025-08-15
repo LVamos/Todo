@@ -1,7 +1,5 @@
 ﻿using System.Net;
 
-using FluentValidation;
-
 namespace Todo.App.Middleware;
 
 public class ExceptionHandlingMiddleware
@@ -25,7 +23,6 @@ public class ExceptionHandlingMiddleware
         {
             var (statusCode, logLevel, responseObj) = MapException(ex);
 
-            // Log with appropriate level
             switch (logLevel)
             {
                 case LogLevel.Warning:
@@ -51,19 +48,6 @@ public class ExceptionHandlingMiddleware
     private static (int StatusCode, LogLevel LogLevel, object Response) MapException(Exception ex) =>
         ex switch
         {
-            ValidationException v => (
-                StatusCodes.Status400BadRequest,
-                LogLevel.Warning,
-                new
-                {
-                    type = "validation",
-                    error = "Validation failed",
-                    details = v.Errors
-                        .Select(e => new { field = e.PropertyName, message = e.ErrorMessage })
-                        .GroupBy(e => e.field)
-                        .ToDictionary(g => g.Key, g => g.Select(x => x.message).ToArray())
-                }),
-
             InvalidOperationException => (
                 StatusCodes.Status409Conflict,
                 LogLevel.Warning,
@@ -89,7 +73,7 @@ public class ExceptionHandlingMiddleware
                 {
                     type = "internal",
                     error = "An unexpected error occurred.",
-                    detail = ex.Message // keep simple; avoid inner exception chain leakage
+                    detail = ex.Message
                 })
         };
 }

@@ -13,6 +13,8 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="8.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -30,6 +32,7 @@
     <ProjectReference Include="..\Todo.Api\Todo.Api.csproj" />
     <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
     <ProjectReference Include="..\Todo.ServerConfigurations\Todo.ServerConfigurations.csproj" />
+    <ProjectReference Include="..\Todo.Services\Todo.Services.csproj" />
   </ItemGroup>
 
 </Project>

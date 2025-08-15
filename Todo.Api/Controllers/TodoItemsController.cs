@@ -22,15 +22,14 @@ namespace Todo.API.Controllers
         }
 
         /// <summary>Gets all to-do items for a list.</summary>
-        [HttpGet("GetTodoItemsByListId/{listId}")]
+        [HttpGet("GetTodoItemsByListId/{id}")]
         [ProducesResponseType(typeof(TodoItemsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TodoItemsResponse>> GetTodoItemsByListId(int listId)
+        public async Task<ActionResult<TodoItemsResponse>> GetTodoItemsByListId([FromRoute] IdRequest request)
         {
-            var request = new IdRequest { Id = listId };
-            var result = await _todoItemService.GetTodoItemsByListIdAsync(request);
+            TodoItemsResponse result = await _todoItemService.GetTodoItemsByListIdAsync(request);
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -41,10 +40,9 @@ namespace Todo.API.Controllers
         [ProducesResponseType(typeof(TodoItemResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TodoItemResponse>> GetTodoItemById(int id)
+        public async Task<ActionResult<TodoItemResponse>> GetTodoItemById([FromRoute] IdRequest request)
         {
-            var request = new IdRequest { Id = id };
-            var result = await _todoItemService.GetTodoItemByIdAsync(request);
+            TodoItemResponse result = await _todoItemService.GetTodoItemByIdAsync(request);
             if (result == null)
                 return NotFound();
             return Ok(result);
@@ -74,13 +72,12 @@ namespace Todo.API.Controllers
 
         /// <summary>Deletes a to-do item by ID.</summary>
         /// <remarks>Note: Uses GET route for deletion to keep compatibility with existing client/tests.</remarks>
-        [HttpGet("DeleteTodoItem/{id}")]
+        [HttpDelete("DeleteTodoItem/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteTodoItem(int id)
+        public async Task<ActionResult> DeleteTodoItem([FromRoute] IdRequest request)
         {
-            var request = new IdRequest { Id = id };
             await _todoItemService.DeleteTodoItemAsync(request);
             return Ok();
         }

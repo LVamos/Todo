@@ -1,10 +1,14 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 using System.Reflection;
 
 using Todo.App.Middleware;
 using Todo.ServerConfigurations.DependencyInjection;
+using Todo.Services.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>((ctx, container) =>
 builder.Services
     .AddControllers()
     .AddApplicationPart(typeof(Todo.API.Controllers.TodoListsController).Assembly);
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<IdRequestValidator>();
 
 // Swagger + XML comments
 builder.Services.AddEndpointsApiExplorer();
