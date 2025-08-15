@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-
-using Todo.Contracts.Contracts.Requests;
+﻿using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
 using Todo.Services.Abstraction.DatabaseServices;
 
@@ -9,88 +7,100 @@ namespace Todo.Tests.Mocks;
 
 public class TestDatabaseService : IDatabaseService
 {
-    public async Task<bool> TodoListExistsAsync(string listName)
+    public Task<bool> TodoListExistsAsync(string listName)
     {
         bool? result = TestData.GetData(TestData.TodoListExistsResult);
         TestResults.TodoListExists = result;
         if (result == null)
             throw new ArgumentException(nameof(listName));
-        else return result.Value;
+        return Task.FromResult(result.Value);
     }
 
-    public async Task<TodoListsResponse> GetAllTodoListsAsync()
+    public Task<TodoListsResponse> GetAllTodoListsAsync()
     {
         TodoListsResponse result = TestData.GetData(TestData.GetAllTodoListsResults);
         TestResults.GetAllTodoLists = result;
-        return result;
+        return Task.FromResult(result);
     }
 
-    public async Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
+    public Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
     {
         TodoListResponse result = TestData.GetData(TestData.GetTodoListByIdResult);
         TestResults.GetTodoListById = result;
-        return result ?? throw new InvalidOperationException();
+        if (result == null)
+            throw new InvalidOperationException();
+        return Task.FromResult<TodoListResponse?>(result);
     }
 
-    public async Task AddTodoListAsync(AddTodoListRequest todoList)
+    public Task AddTodoListAsync(AddTodoListRequest todoList)
     {
         bool result = TestData.GetData(TestData.AddTodoListResult);
         TestResults.AddTodoList = result;
         if (!result)
             throw new InvalidOperationException();
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
+    public Task UpdateTodoListAsync(UpdateTodoListRequest list)
     {
         bool result = TestData.GetData(TestData.UpdateTodoListResult);
         TestResults.UpdateTodoList = result;
         if (!result)
             throw new InvalidOperationException();
+        return Task.CompletedTask;
     }
 
-    public async Task DeleteTodoListAsync(IdRequest id)
+    public Task DeleteTodoListAsync(IdRequest id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoListResult);
         TestResults.DeleteTodoList = result;
         if (!result)
             throw new InvalidOperationException();
+        return Task.CompletedTask;
     }
 
-    public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
+    public Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
     {
         TodoItemsResponse result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
         TestResults.GetTodoItemsByListId = result;
-        return result ?? throw new ArgumentException(nameof(listId));
+        if (result == null)
+            throw new ArgumentException(nameof(listId));
+        return Task.FromResult(result);
     }
 
-    public async Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
+    public Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
     {
         TodoItemResponse result = TestData.GetData(TestData.GetTodoItemByIdResult);
         TestResults.GetTodoItemById = result;
-        return result ?? throw new ArgumentException(nameof(id));
+        if (result == null)
+            throw new ArgumentException(nameof(id));
+        return Task.FromResult<TodoItemResponse?>(result);
     }
 
-    public async Task AddTodoItemAsync(AddTodoItemRequest item)
+    public Task AddTodoItemAsync(AddTodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.AddTodoItemResult);
         TestResults.AddTodoItem = result;
         if (!result)
             throw new ArgumentException(nameof(item));
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
+    public Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
     {
         bool result = TestData.GetData(TestData.UpdateTodoItemResult);
         TestResults.UpdateTodoItem = result;
         if (!result)
             throw new ArgumentException(nameof(item));
+        return Task.CompletedTask;
     }
 
-    public async Task DeleteTodoItemAsync(IdRequest id)
+    public Task DeleteTodoItemAsync(IdRequest id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoItemResult);
         TestResults.DeleteTodoItem = result;
         if (!result)
             throw new ArgumentException(nameof(id));
+        return Task.CompletedTask;
     }
 }
