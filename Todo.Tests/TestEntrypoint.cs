@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 using Todo.App;
 using Todo.App.Helpers;
+using Todo.App.Middleware;
 using Todo.Tests.DependencyInjection;
 
 namespace Todo.Tests;
@@ -23,7 +24,9 @@ public class TestEntrypoint
 		startup.ConfigureServices(builder.Services);
 
 		WebApplication app = builder.Build();
-		IocContainerProvider.ServiceProvider = app.Services;
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+        IocContainerProvider.ServiceProvider = app.Services;
 		startup.Configure(app, app.Environment);
 		app.Run();
 	}
