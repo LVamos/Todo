@@ -1,34 +1,54 @@
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Serilog;
-using Todo.App;
-using Todo.App.Helpers;
-using Todo.Dal.Abstraction;
-using Todo.Dal.Context;
 using Todo.ServerConfigurations.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
-IConfiguration configuration = ConfigurationHelper.GetConfiguration(builder.Environment);
+var builder = WebApplication.CreateBuilder(args);
 
-// using Autofac instead of standard DI
-builder.Host.UseServiceProviderFactory(
-    new AutofacServiceProviderFactory(x => new IocMapping().Install(configuration, x)));
-
-Startup startup = new(builder.Configuration);
-startup.ConfigureServices(builder.Services);
-
-WebApplication app = builder.Build();
-IocContainerProvider.ServiceProvider = app.Services;
-
-// Apply EF Core migrations automatically on startup
-using (var scope = app.Services.CreateScope())
+// Autofac integration
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>((ctx, container) =>
 {
-    var factory = scope.ServiceProvider.GetRequiredService<IContextFactory>();
-    using var dbContext = factory.GetDbContext();
-    dbContext.Database.Migrate();
+    new IocMapping().Install(ctx.Configuration, container);
+});
+
+// Controllers from the separate library (Todo.Api)
+builder.Services
+    .AddControllers()
+    .AddApplicationPart(typeof(Todo.API.Controllers.TodoListsController).Assembly);
+
+// Swagger + XML comments
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    // XML from API project
+    var apiAssembly = typeof(Todo.API.Controllers.TodoListsController).Assembly;
+    var apiXml = Path.Combine(AppContext.BaseDirectory, $"{apiAssembly.GetName().Name}.xml");
+    if (File.Exists(apiXml))
+    {
+        options.IncludeXmlComments(apiXml, includeControllerXmlComments: true);
+    }
+
+    // XML from host project (optional)
+    var hostXml = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+    if (File.Exists(hostXml))
+    {
+        options.IncludeXmlComments(hostXml);
+    }
+});
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1");
+        c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+    });
 }
 
-startup.Configure(app, app.Environment);
-
+app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
