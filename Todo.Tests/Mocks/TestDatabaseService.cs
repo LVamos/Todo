@@ -1,5 +1,6 @@
 ﻿using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
+using Todo.Entities.Entities;
 using Todo.Services.Abstraction.DatabaseServices;
 
 
@@ -16,23 +17,23 @@ public class TestDatabaseService : IDatabaseService
         return Task.FromResult(result.Value);
     }
 
-    public Task<TodoListsResponse> GetAllTodoListsAsync()
+    public Task<List<TodoList>> GetAllTodoListsAsync()
     {
-        TodoListsResponse result = TestData.GetData(TestData.GetAllTodoListsResults);
+        List<TodoList> result = TestData.GetData(TestData.GetAllTodoListsResults);
         TestResults.GetAllTodoLists = result;
         return Task.FromResult(result);
     }
 
-    public Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
+    public Task<TodoList?> GetTodoListByIdAsync(int id)
     {
-        TodoListResponse result = TestData.GetData(TestData.GetTodoListByIdResult);
+        TodoList result = TestData.GetData(TestData.GetTodoListByIdResult);
         TestResults.GetTodoListById = result;
         if (result == null)
             throw new InvalidOperationException();
-        return Task.FromResult<TodoListResponse?>(result);
+        return Task.FromResult<TodoList?>(result);
     }
 
-    public Task AddTodoListAsync(AddTodoListRequest todoList)
+    public Task AddTodoListAsync(TodoList todoList)
     {
         bool result = TestData.GetData(TestData.AddTodoListResult);
         TestResults.AddTodoList = result;
@@ -41,7 +42,7 @@ public class TestDatabaseService : IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task UpdateTodoListAsync(UpdateTodoListRequest list)
+    public Task UpdateTodoListAsync(TodoList list)
     {
         bool result = TestData.GetData(TestData.UpdateTodoListResult);
         TestResults.UpdateTodoList = result;
@@ -50,7 +51,7 @@ public class TestDatabaseService : IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task DeleteTodoListAsync(IdRequest id)
+    public Task DeleteTodoListAsync(int id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoListResult);
         TestResults.DeleteTodoList = result;
@@ -59,25 +60,25 @@ public class TestDatabaseService : IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
+    public Task<List<TodoItem>> GetTodoItemsByListIdAsync(int listId)
     {
-        TodoItemsResponse result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
+        List<TodoItem> result = TestData.GetData(TestData.GetTodoItemsByListIdResult);
         TestResults.GetTodoItemsByListId = result;
         if (result == null)
             throw new ArgumentException(nameof(listId));
         return Task.FromResult(result);
     }
 
-    public Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
+    public Task<TodoItem?> GetTodoItemByIdAsync(int id)
     {
-        TodoItemResponse result = TestData.GetData(TestData.GetTodoItemByIdResult);
+        TodoItem result = TestData.GetData(TestData.GetTodoItemByIdResult);
         TestResults.GetTodoItemById = result;
         if (result == null)
             throw new ArgumentException(nameof(id));
-        return Task.FromResult<TodoItemResponse?>(result);
+        return Task.FromResult<TodoItem?>(result);
     }
 
-    public Task AddTodoItemAsync(AddTodoItemRequest item)
+    public Task AddTodoItemAsync(TodoItem item)
     {
         bool result = TestData.GetData(TestData.AddTodoItemResult);
         TestResults.AddTodoItem = result;
@@ -86,7 +87,7 @@ public class TestDatabaseService : IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
+    public Task UpdateTodoItemAsync(TodoItem item)
     {
         bool result = TestData.GetData(TestData.UpdateTodoItemResult);
         TestResults.UpdateTodoItem = result;
@@ -95,7 +96,7 @@ public class TestDatabaseService : IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task DeleteTodoItemAsync(IdRequest id)
+    public Task DeleteTodoItemAsync(int id)
     {
         bool result = TestData.GetData(TestData.DeleteTodoItemResult);
         TestResults.DeleteTodoItem = result;

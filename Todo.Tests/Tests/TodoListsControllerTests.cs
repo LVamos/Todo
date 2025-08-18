@@ -13,6 +13,7 @@ using System.Transactions;
 
 using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
+using Todo.Entities.Entities;
 using Todo.Tests.Mocks;
 
 
@@ -23,8 +24,8 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestValid()
     {
-        IdRequest id = new() { Id = 1 }; 
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Valid, id);
+        int id = 1;
+        TodoList result = await GetTodoListByIdAsync(ResultType.Valid, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Name, Is.EqualTo("Pracovní úkoly"));
         Assert.That(result.Id, Is.EqualTo(1));
@@ -33,8 +34,8 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestLimit()
     {
-        IdRequest id = new() { Id =int.MaxValue};
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Limit, id);
+        int id = int.MaxValue;
+        TodoList result = await GetTodoListByIdAsync(ResultType.Limit, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Name, Is.EqualTo("Maximální ID seznam"));
         Assert.That(result.Id, Is.EqualTo(int.MaxValue));
@@ -43,8 +44,8 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetTodoListByIdTestInvalid()
     {
-        IdRequest id = new() { Id =-1};
-        TodoListResponse result = await GetTodoListByIdAsync(ResultType.Invalid, id);
+        int id = -1;
+        TodoList result = await GetTodoListByIdAsync(ResultType.Invalid, id);
         Assert.That(result, Is.Null);
     }
 
@@ -104,12 +105,12 @@ public class TodoListsControllerTests
         Assert.That(result, Is.False);
     }
 
-    private async Task<TodoListResponse> GetTodoListByIdAsync(ResultType scenario, IdRequest id)
+    private async Task<TodoList> GetTodoListByIdAsync(ResultType scenario, int id)
     {
         TestResults.GetTodoListById = null;
         TestResults.GetTodoListById = null;
         TestData.CurrentScenario = scenario;
-        String uri = $"api/TodoLists/GetTodoListById/{id.Id}";
+        String uri = $"api/TodoLists/GetTodoListById/{id}";
         await TestPlatform.Client.GetAsync(uri);
         return TestResults.GetTodoListById;
     }
@@ -166,15 +167,14 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetAllTodoListsTestLimit()
     {
-        TodoListsResponse result = await GetAllTodoListsAsync(ResultType.Limit); 
+        List<TodoList> result = await GetAllTodoListsAsync(ResultType.Limit); 
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Lists, Is.Not.Null);
-        Assert.That(result.Lists.Count, Is.EqualTo(1000));
-        Assert.That(result.Lists[0].Name, Is.EqualTo("Seznam 1"));
-        Assert.That(result.Lists.Any(l => l.Id == 2), Is.True);
+        Assert.That(result.Count, Is.EqualTo(1000));
+        Assert.That(result[0].Name, Is.EqualTo("Seznam 1"));
+        Assert.That(result.Any(l => l.Id == 2), Is.True);
     }
 
-    private static async Task<TodoListsResponse> GetAllTodoListsAsync(ResultType scenario)
+    private static async Task<List<TodoList>> GetAllTodoListsAsync(ResultType scenario)
     {
         TestResults.GetAllTodoLists = null;
         TestData.CurrentScenario = scenario;
@@ -195,17 +195,17 @@ public class TodoListsControllerTests
     [Test]
     public async Task GetAllTodoListsTestValid()
     {
-        TodoListsResponse result = await GetAllTodoListsAsync(ResultType.Valid);
-        Assert.That(result.Lists, Is.Not.Null);
-        Assert.That(result.Lists.Count, Is.GreaterThan(1));
-        Assert.That(result.Lists[0].Name, Is.EqualTo("Shopping"));
-        Assert.That(result.Lists.Any(l => l.Id == 2), Is.True);
+        List<TodoList> result = await GetAllTodoListsAsync(ResultType.Valid);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Count, Is.GreaterThan(1));
+        Assert.That(result[0].Name, Is.EqualTo("Shopping"));
+        Assert.That(result.Any(l => l.Id == 2), Is.True);
     }
 
     [Test]
     public async Task GetAllTodoListsTestInvalid()
     {
-        TodoListsResponse result =await GetAllTodoListsAsync(ResultType.Invalid);
+        List<TodoList> result =await GetAllTodoListsAsync(ResultType.Invalid);
         Assert.That(result, Is.Null);
     }
 

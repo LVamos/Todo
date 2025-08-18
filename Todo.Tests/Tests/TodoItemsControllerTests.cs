@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
+using Todo.Entities.Entities;
 using Todo.Tests.Mocks;
 
 
@@ -16,8 +17,8 @@ public class TodoItemsControllerTests
     [Test]
     public async Task GetTodoItemByIdTestValid()
     {
-        IdRequest id = new() { Id = 1 };
-        TodoItemResponse result = await GetTodoItemByIdAsync(ResultType.Valid, id);
+        int id = 1;
+        TodoItem result = await GetTodoItemByIdAsync(ResultType.Valid, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Title, Is.EqualTo("Připravit prezentaci"));
         Assert.That(result.Id, Is.EqualTo(1));
@@ -26,8 +27,8 @@ public class TodoItemsControllerTests
     [Test]
     public async Task GetTodoItemByIdTestLimit()
     {
-        IdRequest id = new() { Id=int.MaxValue };
-        TodoItemResponse result = await GetTodoItemByIdAsync(ResultType.Limit, id);
+        int id = int.MaxValue;
+        TodoItem result = await GetTodoItemByIdAsync(ResultType.Limit, id);
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Title, Is.EqualTo("Testovací úkol s maximálním ID"));
         Assert.That(result.Id, Is.EqualTo(int.MaxValue));
@@ -36,39 +37,37 @@ public class TodoItemsControllerTests
     [Test]
     public async Task GetTodoItemByIdTestInvalid()
     {
-        IdRequest id = new() { Id = -1 };
-        TodoItemResponse result = await GetTodoItemByIdAsync(ResultType.Invalid, id);
+        int id = -1;
+        TodoItem result = await GetTodoItemByIdAsync(ResultType.Invalid, id);
         Assert.That(result, Is.Null);
     }
 
     [Test]
     public async Task GetTodoItemsByListIdTestValid()
     {
-        IdRequest id = new() { Id = 1 };
-        TodoItemsResponse result = await GetTodoItemsByListIdAsync(ResultType.Valid, id);
+        int id = 1;
+        List<TodoItem> result = await GetTodoItemsByListIdAsync(ResultType.Valid, id);
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Items, Is.Not.Null);
-        Assert.That(result.Items.Count, Is.EqualTo(2));
-        Assert.That(result.Items.Any(i => i.Id == 1), Is.True);
+        Assert.That(result.Count, Is.EqualTo(2));
+        Assert.That(result.Any(i => i.Id == 1), Is.True);
     }
 
     [Test]
     public async Task GetTodoItemsByListIdTestLimit()
     {
-        IdRequest id = new() { Id = 1 };
-        TodoItemsResponse result = await GetTodoItemsByListIdAsync(ResultType.Limit, id);
+        int id = 1;
+        List<TodoItem> result = await GetTodoItemsByListIdAsync(ResultType.Limit, id);
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Items, Is.Not.Null);
-        Assert.That(result.Items.Count, Is.EqualTo(1000));
-        String firstTitle = result.Items.First().Title;
+        Assert.That(result.Count, Is.EqualTo(1000));
+        String firstTitle = result.First().Title;
         Assert.That(firstTitle, Is.EqualTo("Úkol 1"));
     }
 
     [Test]
     public async Task GetTodoItemsByListIdTestInvalid()
     {
-        IdRequest id = new() { Id = -1 };
-        TodoItemsResponse result = await GetTodoItemsByListIdAsync(ResultType.Invalid, id);
+        int id = -1;
+        List<TodoItem> result = await GetTodoItemsByListIdAsync(ResultType.Invalid, id);
         Assert.That(result, Is.Null);
     }
 
@@ -128,20 +127,20 @@ public class TodoItemsControllerTests
         Assert.That(result, Is.False);
     }
 
-    private static async Task<TodoItemResponse> GetTodoItemByIdAsync(ResultType scenario, IdRequest id)
+    private static async Task<TodoItem> GetTodoItemByIdAsync(ResultType scenario, int id)
     {
         TestResults.GetTodoItemById = null;
         TestData.CurrentScenario = scenario;
-        string uri = $"api/TodoItems/GetTodoItemById/{id.Id}";
+        string uri = $"api/TodoItems/GetTodoItemById/{id}";
         await TestPlatform.Client.GetAsync(uri);
         return TestResults.GetTodoItemById;
     }
 
-    private static async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(ResultType scenario, IdRequest listId)
+    private static async Task<List<TodoItem>> GetTodoItemsByListIdAsync(ResultType scenario, int listId)
     {
         TestResults.GetTodoItemsByListId = null;
         TestData.CurrentScenario = scenario;
-        string uri = $"api/TodoItems/GetTodoItemsByListId/{listId.Id}";
+        string uri = $"api/TodoItems/GetTodoItemsByListId/{listId}";
         await TestPlatform.Client.GetAsync(uri);
         return TestResults.GetTodoItemsByListId;
     }

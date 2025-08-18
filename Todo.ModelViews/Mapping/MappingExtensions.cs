@@ -5,10 +5,41 @@ using Todo.Contracts.Contracts.Responses;
 using Todo.Entities.Entities;
 
 
-namespace Todo.ViewModels.Mapping
+namespace Todo.Contracts.Mapping
 {
 	public static class MappingExtensions
 	{
+        /// <summary>
+        /// Converts AddTodoItemRequest to TodoItem entity.
+        /// </summary>
+        public static TodoItem ToEntity(this UpdateTodoItemRequest request)
+        {
+            if (request == null) return null;
+
+            return new TodoItem
+            {
+                Title = request.Title,
+                IsCompleted = request.IsCompleted,
+                Priority = request.Priority,
+                Deadline = request.Deadline,
+                Comment = request.Comment,
+                TodoListId = request.TodoListId
+            };
+        }
+
+        /// <summary>
+        /// Converts AddTodolistRequest to TodoList entity.
+        /// </summary>
+        public static TodoList ToEntity(this UpdateTodoListRequest request)
+        {
+            if (request == null) return null;
+
+            return new TodoList
+            {
+                Name = request.Name,
+            };
+        }
+
         public static int ToId(this IdRequest request) => request?.Id ?? 0;
         public static IdRequest ToContract(this int id) => new() { Id = id};
 
@@ -53,7 +84,7 @@ namespace Todo.ViewModels.Mapping
 		}
 
 		/// <summary>
-		/// Converts TodoItemViewModel to TodoItem entity.
+		/// Converts AddTodoItemRequest to TodoItem entity.
 		/// </summary>
 		public static TodoItem ToEntity(this AddTodoItemRequest request)
 		{
@@ -87,7 +118,7 @@ namespace Todo.ViewModels.Mapping
 		}
 
 		/// <summary>
-		/// Converts TodoListViewModel to TodoList entity.
+		/// Converts AddTodolistRequest to TodoList entity.
 		/// </summary>
 		public static TodoList ToEntity(this AddTodoListRequest request)
 		{

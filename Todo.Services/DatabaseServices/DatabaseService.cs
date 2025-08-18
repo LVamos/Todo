@@ -2,11 +2,11 @@
 
 using Todo.Contracts.Contracts.Requests;
 using Todo.Contracts.Contracts.Responses;
+using Todo.Contracts.Mapping;
 using Todo.Dal.Abstraction;
 using Todo.Dal.Context;
 using Todo.Entities.Entities;
 using Todo.Services.Abstraction.DatabaseServices;
-using Todo.ViewModels.Mapping;
 
 
 namespace Todo.Services.DatabaseServices;
@@ -19,29 +19,29 @@ public class DatabaseService : IDatabaseService
 		return await context.TodoLists.AnyAsync(l => l.Name.ToLower() == listName.ToLower());
 	}
 
-	public async Task<TodoListsResponse> GetAllTodoListsAsync()
+	public async Task<List<TodoList>> GetAllTodoListsAsync()
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		List<TodoList> lists = await context.TodoLists.Include(tl => tl.Items).ToListAsync();
-		return lists.ToResponses();
+        return lists;
 	}
 
-	public async Task<TodoListResponse?> GetTodoListByIdAsync(IdRequest id)
+	public async Task<TodoList?> GetTodoListByIdAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList list = await context.TodoLists.Include(tl => tl.Items)
-								.FirstAsync(tl => tl.Id == id.ToId());
-		return list.ToResponse();
+								.FirstAsync(tl => tl.Id == id);
+		return list;
 	}
 
-	public async Task AddTodoListAsync(AddTodoListRequest todoList)
+	public async Task AddTodoListAsync(TodoList list)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		context.TodoLists.Add(todoList.ToEntity());
+		context.TodoLists.Add(list);
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoListAsync(UpdateTodoListRequest list)
+	public async Task UpdateTodoListAsync(TodoList list)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoList existing = await context.TodoLists.FindAsync(list.Id);
@@ -51,41 +51,41 @@ public class DatabaseService : IDatabaseService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task DeleteTodoListAsync(IdRequest id)
+	public async Task DeleteTodoListAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		TodoList list = await context.TodoLists.FindAsync(id.ToId());
+		TodoList list = await context.TodoLists.FindAsync(id);
 		if (list == null)
 			throw new InvalidOperationException();
 		context.TodoLists.Remove(list);
 		await context.SaveChangesAsync();
 	}
 
-	public async Task<TodoItemsResponse> GetTodoItemsByListIdAsync(IdRequest listId)
+	public async Task<List<TodoItem>> GetTodoItemsByListIdAsync(int listId)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == listId.ToId())
+		List<TodoItem> items = await context.TodoItems.Where(ti => ti.TodoListId == listId)
             .ToListAsync();
 		if (items == null || !items.Any())
 			throw new ArgumentException($"TodoList {listId} not found");
-		return items.ToResponse();
+		return items;
 	}
 
-	public async Task<TodoItemResponse?> GetTodoItemByIdAsync(IdRequest id)
+	public async Task<TodoItem?> GetTodoItemByIdAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		TodoItem item = await context.TodoItems.FirstAsync(ti => ti.Id == id.ToId());
-		return item.ToResponse();
+		TodoItem item = await context.TodoItems.FirstAsync(ti => ti.Id == id);
+		return item;
 	}
 
-	public async Task AddTodoItemAsync(AddTodoItemRequest todoItem)
+	public async Task AddTodoItemAsync(TodoItem todoItem)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		context.TodoItems.Add(todoItem.ToEntity());
+		context.TodoItems.Add(todoItem);
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateTodoItemAsync(UpdateTodoItemRequest item)
+	public async Task UpdateTodoItemAsync(TodoItem item)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
 		TodoItem existing = await context.TodoItems.FindAsync(item.Id);
@@ -100,10 +100,10 @@ public class DatabaseService : IDatabaseService
 		await context.SaveChangesAsync();
 	}
 
-	public async Task DeleteTodoItemAsync(IdRequest id)
+	public async Task DeleteTodoItemAsync(int id)
 	{
 		using TodoDbContext context = _contextFactory.GetDbContext();
-		TodoItem item = await context.TodoItems.FindAsync(id.ToId());
+		TodoItem item = await context.TodoItems.FindAsync(id);
 		if (item == null)
 		{
 			throw new InvalidOperationException();

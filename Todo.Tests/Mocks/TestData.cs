@@ -29,9 +29,9 @@ public static class TestData
     };
 
 
-    public static TestScenario<TodoItemResponse?> GetTodoItemByIdResult { get; } = new()
+    public static TestScenario<TodoItem?> GetTodoItemByIdResult { get; } = new()
     {
-        [ResultType.Valid] = new TodoItemResponse
+        [ResultType.Valid] = new TodoItem
         {
             Id = 1,
             Title = "Připravit prezentaci",
@@ -41,7 +41,7 @@ public static class TestData
             Comment = "Zaměřit se na důležité body",
             TodoListId = 1
         },
-        [ResultType.Limit] = new TodoItemResponse
+        [ResultType.Limit] = new TodoItem
         {
             Id = int.MaxValue,
             Title = "Testovací úkol s maximálním ID",
@@ -55,11 +55,9 @@ public static class TestData
     };
 
 
-    public static TestScenario<TodoItemsResponse> GetTodoItemsByListIdResult { get; } = new()
+    public static TestScenario<List<TodoItem>> GetTodoItemsByListIdResult { get; } = new()
 	{
-		[ResultType.Valid] = new TodoItemsResponse
-		{
-			Items = new List<TodoItemResponse>
+		[ResultType.Valid] = new List<TodoItem>
 		{
 			new()
 			{
@@ -80,12 +78,10 @@ public static class TestData
 				Deadline = null,
 				Comment = "",
 				TodoListId = 1
-			}
 		}
 		},
-		[ResultType.Limit] = new TodoItemsResponse
-		{
-			Items = Enumerable.Range(1, 1000).Select(i => new TodoItemResponse
+		[ResultType.Limit] =
+        Enumerable.Range(1, 1000).Select(i => new TodoItem
 			{
 				Id = i,
 				Title = $"Úkol {i}",
@@ -94,8 +90,7 @@ public static class TestData
 				Deadline = null,
 				Comment = $"Komentář k úkolu {i}",
 				TodoListId = 1
-			}).ToList()
-		},
+			}).ToList(),
 		[ResultType.Invalid] = null
 	};
 
@@ -124,15 +119,15 @@ public static class TestData
 	};
 
 
-	public static TestScenario<TodoListResponse?> GetTodoListByIdResult { get; } = new()
+	public static TestScenario<TodoList?> GetTodoListByIdResult { get; } = new()
 	{
-		[ResultType.Valid] = new TodoListResponse
+		[ResultType.Valid] = new TodoList
 		{
 			Id = 1,
 			Name = "Pracovní úkoly"
 		},
 
-		[ResultType.Limit] = new TodoListResponse
+		[ResultType.Limit] = new TodoList
 		{
 			Id = int.MaxValue,
 			Name = "Maximální ID seznam"
@@ -141,24 +136,19 @@ public static class TestData
 		[ResultType.Invalid] = null
 	};
 
-	public static TestScenario<TodoListsResponse> GetAllTodoListsResults { get; } = new()
+	public static TestScenario<List<TodoList>> GetAllTodoListsResults { get; } = new()
 	{
-		[ResultType.Valid] = new TodoListsResponse
+		[ResultType.Valid] = new List<TodoList>()
 		{
-			Lists = new List<TodoListResponse>
-			{
-				new TodoListResponse { Id = 1, Name = "Shopping" },
-				new TodoListResponse { Id = 2, Name = "Work" }
-			}
+				new TodoList{ Id = 1, Name = "Shopping" },
+				new TodoList{ Id = 2, Name = "Work" }
 		},
-		[ResultType.Limit] = new TodoListsResponse
-		{
-			Lists = Enumerable.Range(1, 1000).Select(i => new TodoListResponse
+		[ResultType.Limit] =
+        Enumerable.Range(1, 1000).Select(i => new TodoList
 			{
 				Id = i,
 				Name = $"Seznam {i}"
-			}).ToList()
-		},
+			}).ToList(),
 		[ResultType.Invalid] = null
 	};
 
