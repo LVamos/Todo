@@ -81,7 +81,7 @@ public class TodoItemsControllerTests
             TodoListId = 1
         };
         bool result = await AddTodoItemAsync(ResultType.Valid, item);
-            Assert.That(result, Is.True);
+                Assert.That(result, Is.True);
     }
 
     [Test]
@@ -151,7 +151,7 @@ public class TodoItemsControllerTests
         TestResults.AddTodoItem = false;
         TestData.CurrentScenario = scenario;
         string uri = "api/TodoItems/AddTodoItem";
-        await TestPlatform.PostAsync(item, uri);
+        HttpResponseMessage response =await TestPlatform.PostAsync(item, uri);
         return TestResults.AddTodoItem;
     }
 
@@ -169,7 +169,7 @@ public class TodoItemsControllerTests
         TestResults.DeleteTodoItem = false;
         TestData.CurrentScenario = scenario;
         string uri = $"api/TodoItems/DeleteTodoItem/{id.Id}";
-        await TestPlatform.Client.GetAsync(uri);
+        await TestPlatform.Client.DeleteAsync(uri);
         return TestResults.DeleteTodoItem;
     }
 }

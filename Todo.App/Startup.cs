@@ -19,17 +19,14 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers()
+                .AddApplicationPart(typeof(Todo.API.Controllers.TodoListsController).Assembly)
             .AddNewtonsoftJson();
-
-        // FluentValidation v11+ integration (AddFluentValidation removed)
         services.AddValidatorsFromAssemblyContaining<AddTodoListValidator>();
         services.AddFluentValidationAutoValidation(options =>
         {
             options.DisableDataAnnotationsValidation = true; // optional
         });
         services.AddFluentValidationClientsideAdapters();
-
-        // ... další DI registrace ...
     }
 
     public void Configure(WebApplication app, IWebHostEnvironment env)

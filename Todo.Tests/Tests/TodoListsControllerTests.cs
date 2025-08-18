@@ -128,7 +128,7 @@ public class TodoListsControllerTests
         TestResults.DeleteTodoList = false;
         TestData.CurrentScenario = scenario;
         String uri = $"api/TodoLists/DeleteTodoList/{id.Id}";
-        await TestPlatform.Client.GetAsync(uri);
+        await TestPlatform.Client.DeleteAsync(uri);
         return TestResults.DeleteTodoList;
     }
 
