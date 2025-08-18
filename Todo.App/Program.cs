@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 
 using System.Reflection;
 
+using Todo.App;
 using Todo.App.Middleware;
 using Todo.ServerConfigurations.DependencyInjection;
 using Todo.Services.Validation;
@@ -19,12 +20,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>((ctx, container) =>
     new IocMapping().Install(ctx.Configuration, container);
 });
 
-// Controllers from the separate library (Todo.Api)
-builder.Services
-    .AddControllers()
-    .AddApplicationPart(typeof(Todo.API.Controllers.TodoListsController).Assembly);
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<IdRequestValidator>();
+Startup startup = new(builder.Configuration);
+startup.ConfigureServices(builder.Services);
 
 // Swagger + XML comments
 builder.Services.AddEndpointsApiExplorer();

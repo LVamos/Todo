@@ -27,7 +27,7 @@ public class TestEntrypoint
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         IocContainerProvider.ServiceProvider = app.Services;
-		startup.Configure(app, app.Environment);
-		app.Run();
+        app.MapControllers();
+        app.Run();
 	}
 }

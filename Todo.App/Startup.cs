@@ -21,16 +21,8 @@ public class Startup
         services.AddControllers()
                 .AddApplicationPart(typeof(Todo.API.Controllers.TodoListsController).Assembly)
             .AddNewtonsoftJson();
-        services.AddValidatorsFromAssemblyContaining<AddTodoListValidator>();
-        services.AddFluentValidationAutoValidation(options =>
-        {
-            options.DisableDataAnnotationsValidation = true; // optional
-        });
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<IdRequestValidator>();
         services.AddFluentValidationClientsideAdapters();
-    }
-
-    public void Configure(WebApplication app, IWebHostEnvironment env)
-    {
-        app.MapControllers();
     }
 }
