@@ -29,9 +29,9 @@ public class TodoItemService : ITodoItemService
     public async Task DeleteTodoItemAsync(IdRequest id)
         => await _databaseService.DeleteTodoItemAsync(id.ToId());
 
-    private readonly IDatabaseService _databaseService;
+    private readonly ITodoRepository _databaseService;
 
-    public TodoItemService(IDatabaseService databaseService, ILoggerService loggerService)
+    public TodoItemService(ITodoRepository databaseService, ILoggerService loggerService)
     {
         _databaseService = databaseService;
         // loggerService intentionally unused: logging moved to global ExceptionHandlingMiddleware
