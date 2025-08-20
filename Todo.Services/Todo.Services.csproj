@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Todo.Constants\Todo.Constants.csproj" />
-    <ProjectReference Include="..\Todo.Dal\Todo.Dal.csproj" />
     <ProjectReference Include="..\Todo.Entities\Todo.Entities.csproj" />
     <ProjectReference Include="..\Todo.ModelViews\Todo.Contracts.csproj" />
     <ProjectReference Include="..\Todo.Services.Abstraction\Todo.Services.Abstraction.csproj" />
