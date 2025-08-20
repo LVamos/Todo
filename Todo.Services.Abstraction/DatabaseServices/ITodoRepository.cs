@@ -5,7 +5,7 @@ using Todo.Entities.Entities;
 
 namespace Todo.Services.Abstraction.DatabaseServices
 {
-	public interface IDatabaseService
+	public interface ITodoRepository
 	{
 		Task<bool> TodoListExistsAsync(string listName);
 		Task<List<TodoList>> GetAllTodoListsAsync();

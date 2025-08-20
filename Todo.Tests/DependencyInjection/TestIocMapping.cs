@@ -36,15 +36,15 @@ public class TestIocMapping : IocMapping
 	{
 		RegisterConfigurationServices(configuration, builder);
 		RegisterBackgroundServices(builder);
-		RegisterDatabaseServices(configuration, builder);
+		RegisterRepositories(configuration, builder);
 		RegisterCommunicationServices(builder);
 		RegisterServerServices(builder);
 		RegisterBusinessServices(builder);
 	}
 
-	protected override void RegisterDatabaseServices(IConfiguration configuration, ContainerBuilder builder)
+	protected override void RegisterRepositories(IConfiguration configuration, ContainerBuilder builder)
 	{
-		builder.RegisterType<TestDatabaseService>().As<IDatabaseService>();
+		builder.RegisterType<TestDatabaseService>().As<ITodoRepository>();
 	}
 
 	/// <summary>

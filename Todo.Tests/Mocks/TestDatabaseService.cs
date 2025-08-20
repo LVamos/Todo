@@ -6,7 +6,7 @@ using Todo.Services.Abstraction.DatabaseServices;
 
 namespace Todo.Tests.Mocks;
 
-public class TestDatabaseService : IDatabaseService
+public class TestDatabaseService : ITodoRepository
 {
     public Task<bool> TodoListExistsAsync(string listName)
     {
